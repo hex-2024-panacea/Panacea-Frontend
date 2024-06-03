@@ -35,7 +35,7 @@ let navbarOptions: Array<object> = isLogin ?
 
 export default function Navbar() {
   return (
-    <nav className="flex fixed top-0 right-0 left-0 items-center justify-center pt-[30px] pb-[23px] bg-[#FFF]">
+    <nav className="flex fixed z-10 top-0 right-0 left-0 items-center justify-center pt-[30px] pb-[23px] bg-[#FFF] shadow-sm">
       <div className="max-w-[1296px] w-full flex items-center justify-between">
         <div className="flex items-center">
           <a href="/" className="cursor-pointer">
@@ -43,7 +43,7 @@ export default function Navbar() {
           </a>
           <a href="/courses" className="cursor-pointer">課程列表</a>
         </div>
-        <div className="flex items-center absolute top-0 bg-[#FAFAFA] rounded-b-[8px] right-[20%]">
+        <div className="flex items-center absolute top-0 bg-[#FAFAFA] rounded-b-[8px] right-[20%] shadow-sm">
           <ul className="flex items-center gap-[20px] px-[48px] py-[40px]">
             {
               navbarOptions.map((item, index) => (
