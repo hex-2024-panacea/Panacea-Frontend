@@ -7,35 +7,18 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-
 export default function Signup() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   interface SignupData {
-    name: string,
-    email: string,
-    password: string,
-    confirmPassword: string,
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
   }
-
-  // get submit data
-  const onFinish = async(values: any) => {
-    setLoading(true);
-    try {
-      // Process filteredValues (without agreement)
-      const { agreement, ...filteredValues } = values;
-      await signupUser(filteredValues);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
-  //   console.log('Failed:', errorInfo);
-  // };
-
-  const signupUser = async (postData: SignupData): Promise<void> => {
+  // TODO: 自定義 HOOK
+  const signupUserAPI = async (postData: SignupData): Promise<void> => {
     try {
       const apiPath = '/api/signup';
       const response = await fetch(apiPath, {
@@ -50,16 +33,30 @@ export default function Signup() {
         throw new Error('Login failed');
       }
       const data = await response.json();
-      console.log(data, 'data');
-      if(data.code !== 200){
+      if (data.code !== 200) {
         message.error('註冊失敗！請檢查是否輸入正確');
-        return
+        return;
       }
-      // 跳轉至首頁
-      // router.push('/');
       message.success(data.message);
     } catch (error) {
       console.error('Error during login:', error);
+    }
+  };
+
+  // get submit data
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    try {
+      // Process filteredValues (without agreement)
+      const { agreement, ...filteredValues } = values;
+      await signupUserAPI(filteredValues);
+      // 跳轉至驗證信頁面
+      const encodedEmail = encodeURIComponent(values.email);
+      router.push(`/notification/email-sent?email=${encodedEmail}&type=signup`);
+    } catch (error) {
+      message.error(error instanceof Error ? error.message : 'An unexpected error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,14 +67,7 @@ export default function Signup() {
       </div>
       <div className="flex justify-center items-center w-full">
         <Image className="w-1/2 max-w-[300px]" src={signupImage} alt="Picture of the author" />
-        <Form
-          className="w-1/2 max-w-[400px]"
-          layout="vertical"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
+        <Form className="w-1/2 max-w-[400px]" layout="vertical" onFinish={onFinish}>
           <Form.Item label="姓名" name="name" rules={[{ required: true, message: '請輸入姓名' }]}>
             <Input />
           </Form.Item>
@@ -102,6 +92,7 @@ export default function Signup() {
                 required: true,
                 message: '請輸入密碼',
               },
+              { min: 8, message: '請設定至少8碼英文與數字' },
             ]}
             hasFeedback
           >
@@ -123,9 +114,7 @@ export default function Signup() {
                   if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(
-                    new Error('The new password that you entered do not match!')
-                  );
+                  return Promise.reject(new Error('密碼不一致，請確認密碼是否相同'));
                 },
               }),
             ]}
