@@ -111,7 +111,7 @@ export default function Home() {
         </h3>
         <ul className="flex flex-col gap-[40px]">
           {
-            searchCourse.map((item, index) => (
+            searchCourse.map(({ title, description, sidebar }, index) => (
               <li 
                 className="pt-[100px] pb-[80px] gap-[25px] rounded-[120px] flex items-center justify-center w-[1296px] even:flex-row-reverse"
                 key={index} 
@@ -120,12 +120,12 @@ export default function Home() {
                 <div className="flex items-start justify-center gap-[24px]">
                   <Image src="landing-arrow.svg" alt="icon" width={48} height={48} className="translate-y-[-10px]" />
                   <div className="max-w-[533px]">
-                    <h4 className="heading2 mb-[32px]">{item.title}</h4>
-                    <p className="heading5">{item.description}</p>
+                    <h4 className="heading2 mb-[32px]">{title}</h4>
+                    <p className="heading5">{description}</p>
                   </div>
                 </div>
                 <Image src="/test.png" alt="icon" width={416} height={215} />
-                <p className="underline heading3 underline-offset-[8px] ml-[24px] translate-y-[-80px]" style={{ writingMode: 'vertical-lr' }}>{item.sidebar}</p>
+                <p className="underline heading3 underline-offset-[8px] ml-[24px] translate-y-[-80px]" style={{ writingMode: 'vertical-lr' }}>{sidebar}</p>
               </li>
             ))
           }
@@ -142,7 +142,10 @@ export default function Home() {
         <ul className="rounded-[32px] px-[16px] py-[48px] w-[1296px] bg-[#fff] flex flex-col ">
           {
             coachSteps.map(({ title, description, img }, index) => (
-              <li className="relative flex items-center [&:nth-child(2)]:border-b [&:nth-child(1)]:border-b border-dashed border-[#BCE3FA] py-[48px] px-[94px]">
+              <li 
+                className="relative flex items-center [&:nth-child(2)]:border-b [&:nth-child(1)]:border-b border-dashed border-[#BCE3FA] py-[48px] px-[94px]"
+                key={index} 
+              >
                 <Image src="/test.png" alt="icon"  width={525} height={320} />
                 <div className="flex flex-col gap-[32px] px-[48px] w-[526px]">
                   <div className="heading3 px-[36px] py-[8px] bg-second-400 rounded-[40px] w-[175px] text-center">Step{index + 1}</div>
@@ -169,7 +172,10 @@ export default function Home() {
           <ul className="rounded-[32px] px-[16px] py-[48px] bg-[#fff] flex items-center justify-center">
             {
               whyPanacea.map(({ title, description, slogan }, index) => (
-                <li className="relative flex items-center px-[80px]  border-[2px] [&:nth-child(2)]:mx-[-45px] border-[#E5E5E5] rounded-full h-[465px] w-[465px]">
+                <li 
+                  className="relative flex items-center px-[80px]  border-[2px] [&:nth-child(2)]:mx-[-45px] border-[#E5E5E5] rounded-full h-[465px] w-[465px]"
+                  key={index}
+                >
                   <div className="flex flex-col gap-[32px]">
                     <h4 className="heading2">{title}</h4>
                     <p className="heading5">{description}</p>
