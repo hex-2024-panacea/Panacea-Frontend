@@ -1,7 +1,17 @@
 import Image from "next/image";
 import bg from '../public/bg-search.svg';
 
-const searchCourse: Array<object> = [
+interface LandingOption {
+  title: string;
+  description: string,
+  img?: string,
+  url?: string;
+  sidebar?: string,
+  slogan?:string,
+}
+
+
+const searchCourse: LandingOption[] = [
   {
     title: '利用不同篩選條件搜尋',
     description: '可以利用課程類別、上課時間，選擇你想要的課程，也可以在課程頁面看到教練資訊以及其他學員的評價。',
@@ -22,7 +32,7 @@ const searchCourse: Array<object> = [
   },
 ];
 
-const coachSteps: Array<object> = [
+const coachSteps: LandingOption[] = [
   {
     title: '註冊成為教練',
     description: '點選成為教練，填入表單資料並上傳相關證件後，經過審核即可成為教練。',
@@ -40,7 +50,7 @@ const coachSteps: Array<object> = [
   },
 ]
 
-const whyPanacea: Array<object> = [
+const whyPanacea: LandingOption[] = [
   {
     title: '便利',
     description: '購買課程後，只要在期限前可以任意選擇與教練上課的時間。',
