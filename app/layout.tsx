@@ -6,7 +6,13 @@ import Navbar  from '../components/Navbar';
 import "./globals.css";
 
 const inter = Inter({ subsets: ['latin'] });
-const footerOptions: Array<object> = [
+
+interface FooterOption {
+  title: string;
+  url: string;
+}
+
+const footerOptions: FooterOption[] = [
   {
     title: '關於我們',
     url: '/about',
@@ -59,13 +65,13 @@ export default function RootLayout({
           <div className='flex justify-between max-w-[1296px] w-full'>
             <ul>
               {
-                footerOptions.map((item, index) => (
+                footerOptions.map(({url, title}, index) => (
                   <li key={index} className='inline-block mr-5'>
                     <a
-                      href={item.url}
+                      href={url}
                       className='text-[#FAFAFA]'
                     >
-                      {item.title}
+                      {title}
                     </a>
                   </li>
                 ))

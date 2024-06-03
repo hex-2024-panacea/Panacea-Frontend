@@ -3,7 +3,12 @@ import Image from "next/image";
 
 let isLogin: boolean = false;
 
-let navbarOptions: Array<object> = isLogin ? 
+interface NavbarOption {
+  title: string;
+  url: string;
+}
+
+let navbarOptions: NavbarOption[] = isLogin ? 
 [
   {
     title: '成為教練',
@@ -46,9 +51,9 @@ export default function Navbar() {
         <div className="flex items-center absolute top-0 bg-[#FAFAFA] rounded-b-[8px] right-[20%] shadow-sm">
           <ul className="flex items-center gap-[20px] px-[48px] py-[40px]">
             {
-              navbarOptions.map((item, index) => (
+              navbarOptions.map(({ url, title }, index) => (
                 <li key={index}>
-                  <a href={item.url}>{item.title}</a>
+                  <a href={url}>{title}</a>
                 </li>
               ))
             }
