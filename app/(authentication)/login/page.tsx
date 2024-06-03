@@ -4,6 +4,7 @@ import Image from 'next/image';
 import loginImage from '/public/login.svg';
 import Link from 'next/link';
 
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -16,22 +17,57 @@ export default function LoginPage() {
     password: string;
   }
 
+  interface SearchParams {
+    userId: string | null;
+    expires: string | null;
+    signature: string | null;
+  }
+
+  const getSearchParams = (): SearchParams => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return {
+      userId: searchParams.get('userId'),
+      expires: searchParams.get('expires'),
+      signature: searchParams.get('signature'),
+    };
+  };
+
+  const verifyEmailLinkAPI = async (params: SearchParams): Promise<void> => {
+    const { userId, expires, signature } = params;
+    try {
+      const apiPath = `/api/email-link/${userId}?expires=${expires}&signature=${signature}`;
+      const response = await fetch(apiPath);
+      const data = await response.json();
+      if (data.code !== 200 || !data.code) {
+        message.error(data.message);
+        return;
+      }
+      message.success('驗證成功，請登入');
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+
+  //判斷是否有 query
+  useEffect(() => {
+    const searchParams = getSearchParams();
+    if (searchParams.userId) {
+      verifyEmailLinkAPI(searchParams);
+    }
+  }, []);
+
   // get submit data
 
-  const onFinish = async(values: any) => {
+  const onFinish = async (values: any) => {
     setLoading(true);
     try {
       // Process filteredValues (without rememberMe)
-      const { rememberMe, ...filteredValues } = values;
-      await loginUser(filteredValues);
+      // const { remember, ...filteredValues } = values;
+      await loginUser(values);
     } finally {
       setLoading(false);
     }
   };
-
-  // const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
-  //   console.log('Failed:', errorInfo);
-  // };
 
   // 登入
   // TODO: loginUser 改為 hook
@@ -50,10 +86,9 @@ export default function LoginPage() {
         throw new Error('Login failed');
       }
       const data = await response.json();
-      console.log(data, 'data');
-      if(data.code !== 200){
+      if (data.code !== 200) {
         message.error('登入失敗！請檢查是否輸入正確');
-        return
+        return;
       }
       // 跳轉至首頁
       router.push('/');
@@ -73,10 +108,8 @@ export default function LoginPage() {
         <Form
           className="w-1/2 max-w-[400px]"
           layout="vertical"
-          initialValues={{ remember: true }}
+          // initialValues={{ remember: true }}
           onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
-          autoComplete="off"
         >
           <Form.Item
             label="Email"
@@ -94,13 +127,16 @@ export default function LoginPage() {
           <Form.Item
             label="密碼"
             name="password"
-            rules={[{ required: true, message: '請輸入密碼' }]}
+            rules={[
+              { required: true, message: '請輸入密碼' },
+              { min: 8, message: '請設定至少6碼英文與數字' },
+            ]}
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item name="remember" valuePropName="checked">
+          {/* <Form.Item name="remember" valuePropName="checked">
             <Checkbox>Remember me</Checkbox>
-          </Form.Item>
+          </Form.Item> */}
           <div className="mb-5">
             <Link href="/forgot-password">忘記密碼</Link>
           </div>
