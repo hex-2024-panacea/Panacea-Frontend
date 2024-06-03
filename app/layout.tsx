@@ -2,9 +2,28 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ConfigProvider } from 'antd';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
-import './globals.css';
+import Navbar  from '../components/Navbar';
+import "./globals.css";
 
 const inter = Inter({ subsets: ['latin'] });
+const footerOptions: Array<object> = [
+  {
+    title: '關於我們',
+    url: '/about',
+  },
+  {
+    title: '隱私權政策',
+    url: '/privacy',
+  },
+  {
+    title: '常見問題',
+    url: '/faq',
+  },
+  {
+    title: '聯絡我們',
+    url: '/contact',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Panacea',
@@ -34,7 +53,27 @@ export default function RootLayout({
         }}
       >
         <body className={inter.className}>
-          <AntdRegistry>{children}</AntdRegistry>
+        <Navbar/>
+        <AntdRegistry>{children}</AntdRegistry>
+        <footer className='flex justify-center body py-[40px] bg-primary-500'>
+          <div className='flex justify-between max-w-[1296px] w-full'>
+            <ul>
+              {
+                footerOptions.map((item, index) => (
+                  <li key={index} className='inline-block mr-5'>
+                    <a
+                      href={item.url}
+                      className='text-[#FAFAFA]'
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+            <p className='text-[#FAFAFA]'>Panacea © All Rights Reserved.</p>
+          </div>
+        </footer>
         </body>
       </ConfigProvider>
     </html>
