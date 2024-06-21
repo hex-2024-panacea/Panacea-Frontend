@@ -1,27 +1,51 @@
-// components/UploadComponent.tsx
-import React, { useState } from 'react';
-import { Upload, message, Modal, Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+'use client';
+import { useState, useEffect } from 'react';
+import { Upload, message, Modal } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 interface UploadComponentProps {
-  fileList: any[];
-  setFileList: (fileList: any[]) => void;
+  onFileListChange: (fileList: any[]) => void;
+  onLoadingChange: (loading: boolean) => void;
+  initialFileList: any[];
+  action: string;
+  maxCount?: number;
 }
 
-const UploadComponent: React.FC<UploadComponentProps> = ({ fileList, setFileList }) => {
+const UploadComponent: React.FC<UploadComponentProps> = ({
+  initialFileList,
+  onFileListChange,
+  onLoadingChange,
+  action,
+  maxCount = 1,
+}) => {
+  const [loading, setLoading] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [fileList, setFileList] = useState<any[]>(initialFileList);
 
-  const handleUploadChange = ({ fileList }: any) => {
-    setFileList(fileList);
-  };
+  useEffect(() => {
+    setFileList(initialFileList);
+  }, [initialFileList]);
 
-  const handlePreview = async (file: any) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  const handleUploadChange = async ({ file, fileList }: any) => {
+    setLoading(true);
+    if (file.status === 'uploading') {
+      onLoadingChange(true);
+    } else if (file.status === 'done') {
+      // 取得 api 回傳的 imageUrl
+      const imageUrl = await file.response.data.imageUrl;
+      setImageUrl(imageUrl);
+      onLoadingChange(false);
+    } else if (file.status === 'error') {
+      message.error(`${file.name} file upload failed.`);
+      onLoadingChange(false);
+    } else if (file.status === 'removed') {
+      onLoadingChange(false);
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
+    setFileList(fileList);
+    onFileListChange(fileList); // 更新父元件的 fileList
+    setLoading(false);
   };
 
   const beforeUpload = (file: any) => {
@@ -36,38 +60,35 @@ const UploadComponent: React.FC<UploadComponentProps> = ({ fileList, setFileList
     return isJpgOrPng && isLt2M;
   };
 
-  const getBase64 = (file: any) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
-    });
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+
+  const handlePreview = async (file: any) => {
+    if (!file.url && !file.preview) {
+      file.preview = imageUrl;
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
   };
 
   return (
     <>
       <Upload
         listType="picture-card"
-        fileList={fileList}
         beforeUpload={beforeUpload}
         onChange={handleUploadChange}
+        action={action}
+        fileList={fileList}
         onPreview={handlePreview}
-        maxCount={1}
+        maxCount={maxCount}
       >
-        {fileList.length >= 8 ? null : (
-          <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
-          </div>
-        )}
+        {uploadButton}
       </Upload>
-      <Modal
-        visible={previewVisible}
-        title="Preview Image"
-        footer={null}
-        onCancel={() => setPreviewVisible(false)}
-      >
+      <Modal open={previewVisible} title="Preview Image" footer={null} onCancel={() => setPreviewVisible(false)}>
         <img alt="example" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>

@@ -1,17 +1,5 @@
 'use client';
-import { Button, Checkbox, Form, Input, message, Steps, Upload } from 'antd';
-import {
-  LoadingOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
-import type { GetProp, UploadProps } from 'antd';
-import Link from 'next/link';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Steps } from 'antd';
 
 import useFormStore from '@/stores/applyCoachFormStore';
 import StepOne from './components/StepOne';
@@ -26,7 +14,7 @@ export default function ApplyCoach() {
 
   return (
     <div style={{ height: 'calc(100vh - 104px)' }} className="h-screen">
-      <div className="pt-[150px] max-w-[800px] mx-auto">
+      <div className="mx-auto max-w-[800px] pt-[150px]">
         <Steps
           current={step - 1}
           items={[

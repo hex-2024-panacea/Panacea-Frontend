@@ -1,4 +1,5 @@
-import { Button, Form, Input, Select, message, DatePicker } from 'antd';
+'use client';
+import { Button, Form, Input, Select } from 'antd';
 import useFormStore from '@/stores/applyCoachFormStore';
 
 const StepTwo = () => {
@@ -11,12 +12,11 @@ const StepTwo = () => {
 
   // get submit data
   const onFinish = (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
-    setFormData(values);
+    const formData = { workExperience: values };
+    setFormData(formData);
     nextStep();
   };
 
-  console.log('formData:', formData);
   const positions = [
     '工程師',
     '產品經理',
@@ -32,11 +32,13 @@ const StepTwo = () => {
     '法務',
   ];
 
+  const { workExperience } = formData || {};
+
   return (
-    <div className="max-w-[800px] mx-auto flex justify-center">
+    <div className="mx-auto flex max-w-[800px] justify-center">
       <Form
         form={form}
-        initialValues={formData}
+        initialValues={workExperience}
         className="w-1/2 max-w-[400px]"
         layout="vertical"
         onFinish={onFinish}
@@ -55,13 +57,13 @@ const StepTwo = () => {
               style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
             >
               <Select placeholder="年份">
-                {Array.from({ length: new Date().getFullYear() - 1799 }, (_, i) =>
-                  (1800 + i).toString()
-                ).map(year => (
-                  <Select.Option key={year} value={year}>
-                    {year}年
-                  </Select.Option>
-                ))}
+                {Array.from({ length: new Date().getFullYear() - 1799 }, (_, i) => (1800 + i).toString()).map(
+                  (year) => (
+                    <Select.Option key={year} value={year}>
+                      {year}年
+                    </Select.Option>
+                  ),
+                )}
               </Select>
             </Form.Item>
             <Form.Item
@@ -97,13 +99,13 @@ const StepTwo = () => {
               style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
             >
               <Select placeholder="年份">
-                {Array.from({ length: new Date().getFullYear() - 1799 }, (_, i) =>
-                  (1800 + i).toString()
-                ).map(year => (
-                  <Select.Option key={year} value={year}>
-                    {year}
-                  </Select.Option>
-                ))}
+                {Array.from({ length: new Date().getFullYear() - 1799 }, (_, i) => (1800 + i).toString()).map(
+                  (year) => (
+                    <Select.Option key={year} value={year}>
+                      {year}
+                    </Select.Option>
+                  ),
+                )}
               </Select>
             </Form.Item>
             <Form.Item
@@ -128,17 +130,12 @@ const StepTwo = () => {
             </Form.Item>
           </Form.Item>
         </div>
-        <Form.Item
-          className="flex-1"
-          label="單位名稱"
-          name="department"
-          rules={[{ required: true }]}
-        >
+        <Form.Item className="flex-1" label="單位名稱" name="department" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item className="flex-1" label="職務類別" name="position" rules={[{ required: true }]}>
           <Select>
-            {positions.map(position => (
+            {positions.map((position) => (
               <Select.Option key={position} value={position}>
                 {position}
               </Select.Option>
@@ -148,7 +145,7 @@ const StepTwo = () => {
         <Form.Item className="flex-1" label="職務名稱" name="title" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <div className="flex gap-2 justify-end">
+        <div className="flex justify-end gap-2">
           <div className="felx-1">
             <Button block type="primary" ghost onClick={prevStep}>
               上一步
