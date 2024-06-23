@@ -157,9 +157,12 @@ export default function CoursesPage() {
                 <p className="small-body mb-[36px] text-[#525252]">{description}</p>
                 <p className="mb-[36px] cursor-pointer text-[12px] text-primary-500 underline">瀏覽更多</p>
                 <div className="text-right">
-                  <button className="small-body rounded-[4px] bg-primary-500 px-[16px] py-[4px] text-[#fff]">
+                  <a
+                    href={`courses/${id}`}
+                    className="small-body rounded-[4px] bg-primary-500 px-[16px] py-[4px] text-[#fff]"
+                  >
                     查看課程詳情
-                  </button>
+                  </a>
                 </div>
               </div>
             </li>
