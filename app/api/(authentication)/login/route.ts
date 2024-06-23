@@ -16,7 +16,7 @@ const setCookie = (token: string) => {
     httpOnly: true,
     secure: process.env.NODE_ENV !== 'development',
     path: '/',
-    maxAge: 60 * 60, // 1 hour
+    maxAge: 60 * 60 * 24, // 24 hour
     sameSite: process.env.NODE_ENV === 'development' ? undefined : 'strict',
   });
 };
