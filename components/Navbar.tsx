@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 import { getUserInfo } from '@/app/api/user';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import userStore from '../stores/user';
 
 interface NavbarOption {
@@ -13,8 +13,7 @@ interface NavbarOption {
 
 export default function Navbar() {
   const { setUserInfo } = userStore();
-
-  let navbarOptions: NavbarOption[] = [
+  const [navbarOptions, setNavbarOptions] = useState<NavbarOption[]>([
     {
       title: '成為教練',
       url: '/signup',
@@ -27,8 +26,7 @@ export default function Navbar() {
       title: '註冊',
       url: '/signup',
     },
-  ];
-
+  ]);
   const getUserInfoHandler = async () => {
     const { name: storeName } = userStore.getState();
 
@@ -45,7 +43,7 @@ export default function Navbar() {
       });
 
       if (isCoach) {
-        navbarOptions = [
+        setNavbarOptions([
           {
             title: '刊登課程',
             url: '/profile/coach/course-manage',
@@ -54,9 +52,9 @@ export default function Navbar() {
             title: name,
             url: '/profile',
           },
-        ];
+        ]);
       } else {
-        navbarOptions = [
+        setNavbarOptions([
           {
             title: '成為教練',
             url: '/apply-coach',
@@ -69,7 +67,7 @@ export default function Navbar() {
             title: name,
             url: '/profile',
           },
-        ];
+        ]);
       }
     }
   };
