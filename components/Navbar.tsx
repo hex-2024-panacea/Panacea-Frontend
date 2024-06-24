@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-// import { getUserInfo } from '@/app/api/user';
+import { getUserInfo } from '@/app/api/user';
 import { useEffect } from 'react';
-// import userStore from '../stores/user';
+import userStore from '../stores/user';
 
 const isLogin: boolean = false;
 
@@ -43,22 +43,23 @@ const navbarOptions: NavbarOption[] = isLogin
     ];
 
 export default function Navbar() {
-  // const { setUserInfo } = userStore();
+  const { setUserInfo } = userStore();
 
   useEffect(() => {
     const getUserInfoHandler = async () => {
-      // const { name: userName, email, avatar, isAdmin, isCoach } = await getUserInfo();
-      // console.log(setUserInfo);
-      // console.log(userName);
-      // setUserInfo({
-      //   name: userName,
-      //   email,
-      //   avatar,
-      //   isAdmin,
-      //   isCoach,
-      // });
-      // const { name } = userStore.getState();
-      // console.log(name);
+      const data = await getUserInfo();
+
+      const { name: userName, email, avatar, isAdmin, isCoach } = data;
+
+      setUserInfo({
+        name: userName,
+        email,
+        avatar,
+        isAdmin,
+        isCoach,
+      });
+      const { name } = userStore.getState();
+      console.log(name);
     };
 
     getUserInfoHandler();
