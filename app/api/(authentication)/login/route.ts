@@ -13,7 +13,8 @@ const setCookie = (token: string) => {
   return cookieHeader.set({
     name: 'token',
     value: token,
-    httpOnly: true,
+    // TODO: httpOnly 後續要調整為 true
+    httpOnly: false,
     secure: process.env.NODE_ENV !== 'development',
     path: '/',
     maxAge: 60 * 60 * 24, // 24 hour
