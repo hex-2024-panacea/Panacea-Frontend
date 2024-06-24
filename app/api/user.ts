@@ -13,7 +13,7 @@ interface UserInfo {
 
 export const getUserInfo = async (): Promise<UserInfo> => {
   return request({
-    url: '/auth/user-info',
+    url: 'api/auth/user-info',
     method: 'GET',
   });
 };
