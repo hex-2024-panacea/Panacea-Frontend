@@ -25,6 +25,8 @@ export const POST = async (req: Request): Promise<NextResponse> => {
   try {
     // Parse the request body
     const body: RequestBody = await req.json();
+    console.log(body);
+    console.log(url);
 
     const response = await fetch(url, {
       method: 'POST',

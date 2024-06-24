@@ -1,6 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+// import { getUserInfo } from '@/app/api/user';
+import { useEffect } from 'react';
+// import userStore from '../stores/user';
 
 const isLogin: boolean = false;
 
@@ -40,6 +43,27 @@ const navbarOptions: NavbarOption[] = isLogin
     ];
 
 export default function Navbar() {
+  // const { setUserInfo } = userStore();
+
+  useEffect(() => {
+    const getUserInfoHandler = async () => {
+      // const { name: userName, email, avatar, isAdmin, isCoach } = await getUserInfo();
+      // console.log(setUserInfo);
+      // console.log(userName);
+      // setUserInfo({
+      //   name: userName,
+      //   email,
+      //   avatar,
+      //   isAdmin,
+      //   isCoach,
+      // });
+      // const { name } = userStore.getState();
+      // console.log(name);
+    };
+
+    getUserInfoHandler();
+  });
+
   return (
     <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-center bg-[#FFF] pb-[23px] pt-[30px] shadow-sm">
       <div className="flex w-full max-w-[1296px] items-center justify-between">
