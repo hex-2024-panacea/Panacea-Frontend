@@ -48,8 +48,8 @@ export default function SideBar(props: Props) {
             </div>
             <div className="flex flex-col pl-7">
               <Link href={'/profile/coach'}>教練檔案</Link>
-              <Link href={'/profile/course-manage'}>課程管理</Link>
-              <Link href={'/profile/course-list'}>課程清單</Link>
+              <Link href={'/profile/coach/course-manage'}>課程管理</Link>
+              <Link href={'/profile/coach/course-list'}>課程清單</Link>
             </div>
           </div>
           <div className="px-5">
