@@ -2,17 +2,19 @@
 import { useState, useEffect } from 'react';
 import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import type { UploadFile } from 'antd';
+import Image from 'next/image';
 
 interface UploadComponentProps {
-  onFileListChange: (fileList: any[]) => void;
+  onFileListChange: (fileList: UploadFile[]) => void;
   onLoadingChange: (loading: boolean) => void;
-  initialFileList: any[];
+  defaultFileList: UploadFile[];
   action: string;
   maxCount?: number;
 }
 
 const UploadComponent: React.FC<UploadComponentProps> = ({
-  initialFileList,
+  defaultFileList,
   onFileListChange,
   onLoadingChange,
   action,
@@ -22,11 +24,11 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [imageUrl, setImageUrl] = useState<string>();
-  const [fileList, setFileList] = useState<any[]>(initialFileList);
+  const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList);
 
   useEffect(() => {
-    setFileList(initialFileList);
-  }, [initialFileList]);
+    setFileList(defaultFileList);
+  }, [defaultFileList]);
 
   const handleUploadChange = async ({ file, fileList }: any) => {
     setLoading(true);
@@ -89,7 +91,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
         {uploadButton}
       </Upload>
       <Modal open={previewVisible} title="Preview Image" footer={null} onCancel={() => setPreviewVisible(false)}>
-        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        <Image alt="example" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>
   );

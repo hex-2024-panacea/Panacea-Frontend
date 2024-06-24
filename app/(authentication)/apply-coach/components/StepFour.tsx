@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import useFormStore from '@/stores/applyCoachFormStore';
-import UploadComponent from './UploadComponent';
+import UploadComponent from '@/components/Upload';
 
 const StepFour = () => {
   const [form] = Form.useForm();
@@ -14,7 +14,6 @@ const StepFour = () => {
   }, [form, formData]);
 
   const handleFileListChange = (fileList: any[]) => {
-    console.log('🚀 ~ handleFileListChange ~ fileList:', fileList);
     setFileList(fileList); // 更新 Zustand 中的 fileList
   };
 
@@ -27,15 +26,12 @@ const StepFour = () => {
   };
   // get submit data
   const onFinish = () => {
-    // TODO: 把轉圖片 URL 的邏輯移到這裡
     // 取得文件的 URL
     const getImageUrls = fileList.map((file) => {
       return file.response.data.imageUrl;
     });
     const imageUrls = { certifiedDocuments: getImageUrls };
     setFormData(imageUrls);
-    console.log('🚀 ~ onFinish ~ formData:', imageUrls);
-
     nextStep();
   };
 
@@ -57,7 +53,7 @@ const StepFour = () => {
         <Form.Item name="file" label="Upload">
           <UploadComponent
             action="/api/upload"
-            initialFileList={fileList} // 從 Zustand 讀取初始 fileList
+            defaultFileList={fileList} // 從 Zustand 讀取初始 fileList
             onFileListChange={handleFileListChange} // 處理 fileList 變化
             onLoadingChange={handleLoadingChange} // 處理上傳狀態
             maxCount={4}

@@ -4,7 +4,7 @@ import { Button, Form, Checkbox, message } from 'antd';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const StepThree: React.FC = () => {
+const StepFive: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -49,11 +49,10 @@ const StepThree: React.FC = () => {
         message.error(data.message);
         return;
       }
-      // TODO: 跳轉至個人頁
       router.push('/profile/coach');
       message.success('申請成功！');
     } catch (error) {
-      console.error('Error during login:', error);
+      message.error('發生錯誤｜請稍候再試！');
     }
   };
 
@@ -109,4 +108,4 @@ const StepThree: React.FC = () => {
   );
 };
 
-export default StepThree;
+export default StepFive;
