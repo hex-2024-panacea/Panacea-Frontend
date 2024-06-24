@@ -47,7 +47,7 @@ const BookingCourseCard = () => {
   };
   return (
     <div className="flex max-w-[650px] gap-5">
-      {courses.map((course) => (
+      {courses?.map((course) => (
         <Card
           className="cursor-pointer hover:shadow-md"
           key={course.id}

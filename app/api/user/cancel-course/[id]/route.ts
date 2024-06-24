@@ -5,8 +5,8 @@ export const POST = async (req: NextRequest, { params }: { params: { id: string 
   console.log('🚀 ~ GET ~ status:', params.id);
   const id = params.id;
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/booking-course/${id}/cancel`;
-  return NextResponse.json('response');
   console.log('🚀 ~ POST ~ apiUrl:', apiUrl);
+  return NextResponse.json('response');
   // axios
   //   .get(`/api/user/booking-course/${id}`)
   //   .then((response) => {

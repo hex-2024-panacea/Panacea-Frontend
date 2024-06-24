@@ -1,12 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
 // import axios from 'axios';
 
 // Define the structure of the request body
-// interface CustomSearchParams extends URLSearchParams {
-//   status: string | null;
-// }
+interface CustomSearchParams extends URLSearchParams {
+  status: string | null;
+}
 
-const response = {
+const mockResponse = {
   data: [
     {
       id: '001',
@@ -39,32 +40,48 @@ const response = {
   ],
 };
 
+const getCookie = (name: string): string | undefined => {
+  const cookieStore = cookies();
+  const cookie = cookieStore.get(name);
+  return cookie?.value;
+};
+
 export const GET = async (req: NextRequest) => {
-  console.log('🚀 ~ GET ~ req:', req);
-  // const searchParams: CustomSearchParams = req.nextUrl.searchParams as CustomSearchParams;
-  // const status = searchParams.get('status');
-  // console.log('🚀 ~ GET ~ status:', status);
-  return NextResponse.json(response);
+  // TODO: filter by status
+  const searchParams: CustomSearchParams = req.nextUrl.searchParams as CustomSearchParams;
+  const status = searchParams.get('status');
+  console.log('🚀 ~ GET ~ status:', status);
+
+  // const apiUral = `${process.env.NEXT_PUBLIC_API_URL}/api/user/booking-course?status=${status}`;
   // axios
-  //   .get(`/api/user/order-list?status=${status}`)
+  //   .get(apiUral)
   //   .then((response) => {
   //     return NextResponse.json(response);
   //   })
   //   .catch((error) => {
   //     console.error('Error fetching data:', error);
+  //     return NextResponse.json(error);
   //   });
 
-  // try {
-  //   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/user/order/list?status=${status}`;
-  //   // const response = await fetch(url);
-  //   // // Parse the response data
-  //   // const data = await response.json();
-  //   return NextResponse.json(response);
-  // } catch (error) {
-  //   // Log the error for debugging
-  //   console.error('Error during login:', error);
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/user/booking-course`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${getCookie('token')}`,
+      },
+    });
+    // Parse the response data
+    const data = await response.json();
+    // 暫時解決沒有資料
+    if (data.data.length === 0) {
+      return NextResponse.json(mockResponse);
+    }
+    return NextResponse.json(data);
+  } catch (error) {
+    // Log the error for debugging
+    console.error('Error during login:', error);
 
-  //   // Return a 500 status code for internal server errors
-  //   return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
-  // }
+    // Return a 500 status code for internal server errors
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
 };

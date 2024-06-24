@@ -1,12 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server';
 // import axios from 'axios';
+import { cookies } from 'next/headers';
 
 // Define the structure of the request body
 interface CustomSearchParams extends URLSearchParams {
   status: string | null;
 }
 
-const response = {
+const mockResponse = {
   data: [
     {
       id: '0001',
@@ -49,14 +50,21 @@ const response = {
   ],
 };
 
+const getCookie = (name: string): string | undefined => {
+  const cookieStore = cookies();
+  const cookie = cookieStore.get(name);
+  return cookie?.value;
+};
+
 export const GET = async (req: NextRequest) => {
   // console.log('🚀 ~ GET ~ params:', params);
   const searchParams: CustomSearchParams = req.nextUrl.searchParams as CustomSearchParams;
   const status = searchParams.get('status');
   console.log('🚀 ~ GET ~ status:', status);
-  return NextResponse.json(response);
+
+  // status pending,success,fail
   // axios
-  //   .get(`/api/user/order-list?status=${status}`)
+  //   .get(`/api/user/order/list?status=${status}`)
   //   .then((response) => {
   //     return NextResponse.json(response);
   //   })
@@ -64,17 +72,26 @@ export const GET = async (req: NextRequest) => {
   //     console.error('Error fetching data:', error);
   //   });
 
-  // try {
-  //   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/user/order/list?status=${status}`;
-  //   // const response = await fetch(url);
-  //   // // Parse the response data
-  //   // const data = await response.json();
-  //   return NextResponse.json(response);
-  // } catch (error) {
-  //   // Log the error for debugging
-  //   console.error('Error during login:', error);
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/user/order/list?status=${status}`;
 
-  //   // Return a 500 status code for internal server errors
-  //   return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
-  // }
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${getCookie('token')}`,
+      },
+    });
+    // Parse the response data
+    const data = await response.json();
+    // 暫時解決沒有資料
+    if (data.data.length === 0) {
+      return NextResponse.json(mockResponse);
+    }
+    return NextResponse.json(data);
+  } catch (error) {
+    // Log the error for debugging
+    console.error('Error during login:', error);
+
+    // Return a 500 status code for internal server errors
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
 };

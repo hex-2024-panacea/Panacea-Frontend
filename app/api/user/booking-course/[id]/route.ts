@@ -6,7 +6,7 @@ import { NextResponse, NextRequest } from 'next/server';
 //   status: string | null;
 // }
 
-const response = {
+const mockResponse = {
   code: '200',
   data: {
     id: '001',
@@ -28,19 +28,19 @@ const response = {
   },
 };
 
-export const GET = async (req: NextRequest) => {
-  console.log('🚀 ~ GET ~ req:', req);
-  // const searchParams: CustomSearchParams = req.nextUrl.searchParams as CustomSearchParams;
-  // const status = searchParams.get('status');
-  // console.log('🚀 ~ GET ~ status:', status);
-  return NextResponse.json(response);
+export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+  const id = params.id;
+  console.log('🚀 ~ GET ~ id:', id);
+  return NextResponse.json(mockResponse);
   // axios
   //   .get(`/api/user/booking-course/${id}`)
   //   .then((response) => {
+  //     console.log('🚀 ~ GET ~ response:', response);
   //     return NextResponse.json(response);
   //   })
   //   .catch((error) => {
   //     console.error('Error fetching data:', error);
+  //     return NextResponse.json(error);
   //   });
 
   // try {

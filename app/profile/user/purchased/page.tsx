@@ -7,27 +7,26 @@ import PurchasedCourseCard from './components/PurchasedCourseCard';
 // const onChange = (key: string) => {
 //   console.log(key);
 // };
-
 const items: TabsProps['items'] = [
   {
-    key: 'PAID',
+    key: 'success',
     label: '已完成購買',
-    children: <PurchasedCourseCard status={'PAID'}></PurchasedCourseCard>,
+    children: <PurchasedCourseCard status={'success'}></PurchasedCourseCard>,
   },
   {
-    key: 'UNPAID',
+    key: 'pending',
     label: '未付款',
-    children: <PurchasedCourseCard status={'UNPAID'}></PurchasedCourseCard>,
+    children: <PurchasedCourseCard status={'pending'}></PurchasedCourseCard>,
   },
   {
-    key: 'CANCEL',
+    key: 'fail',
     label: '已取消',
-    children: <PurchasedCourseCard status={'CANCEL'}></PurchasedCourseCard>,
+    children: <PurchasedCourseCard status={'fail'}></PurchasedCourseCard>,
   },
 ];
 
 const PurchasedPage: React.FC = () => {
-  return <Tabs className="w-full" defaultActiveKey="PAID" items={items} />;
+  return <Tabs className="w-full" defaultActiveKey="success" items={items} />;
 };
 
 export default PurchasedPage;

@@ -50,7 +50,8 @@ const CourseCard = ({ status }: PurchasedPageProps) => {
   };
   return (
     <div className="max-w-[650px]">
-      {courses.map((course) => (
+      {courses.length === 0 && <div>尚未購買課程</div>}
+      {courses?.map((course) => (
         <div key={course.id} className="mb-5 flex flex-col gap-3 rounded-lg border border-neutral-400 px-5 py-3">
           <div className="flex justify-between">
             <ul className="flex max-h-[3.5em] flex-col flex-wrap gap-x-6">
