@@ -22,7 +22,6 @@ export const POST = async (req: Request): Promise<NextResponse> => {
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    console.log('🚀 ~ POST ~ token:', token);
     // Parse the request body
     const body: RequestBody = await req.json();
 
@@ -36,7 +35,6 @@ export const POST = async (req: Request): Promise<NextResponse> => {
     });
     // Parse the response data
     const data = await response.json();
-    console.log('🚀 ~ POST ~ data:', data);
 
     // Handle non-OK responses
     if (!response.ok) {
@@ -44,10 +42,16 @@ export const POST = async (req: Request): Promise<NextResponse> => {
     }
     return NextResponse.json(data);
   } catch (error) {
-    // Log the error for debugging
-    console.error('Error during apply:', error);
-
     // Return a 500 status code for internal server errors
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 };
+
+// import { request } from '@/util/request';
+
+// export const login = (postData: RequestBody) =>
+//   request({
+//     url: 'api/auth/apply-coach',
+//     method: 'POST',
+//     data: postData,
+//   });
