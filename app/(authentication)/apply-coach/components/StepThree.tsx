@@ -1,5 +1,5 @@
 'use client';
-import { Button, Form, Input, DatePicker, Space } from 'antd';
+import { Button, Form, Input, DatePicker, Space, Select } from 'antd';
 import useFormStore from '@/stores/applyCoachFormStore';
 
 const StepThree = () => {
@@ -49,7 +49,11 @@ const StepThree = () => {
           <Input />
         </Form.Item>
         <Form.Item label="學位" name="degree" rules={[{ required: true }]}>
-          <Input />
+          <Select>
+            <Select.Option value="學士">學士</Select.Option>
+            <Select.Option value="碩士">碩士</Select.Option>
+            <Select.Option value="博士">博士</Select.Option>
+          </Select>
         </Form.Item>
         <Form.Item className="text-right">
           <Space>
