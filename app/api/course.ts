@@ -1,18 +1,10 @@
 import fetchData from '../../util/request';
 
-interface CourseList {
-  _id: string;
-  name: string;
-  coach: string;
-  coverImage: string;
-  description: string;
-  category: [string];
-  subCategory: [string];
-  startDate: string;
-  isActive: boolean;
-  rating: number;
-  createdAt: string;
-  updatedAt: string;
+interface ResponesBody {
+  code: number;
+  data: object[];
+  message: string;
+  meta: object;
 }
 
 interface CourseListParams {
@@ -21,7 +13,7 @@ interface CourseListParams {
   category?: string;
 }
 
-export const getCourseList = async (params: CourseListParams): Promise<CourseList> => {
+export const getCourseList = async (params: CourseListParams): Promise<ResponesBody> => {
   return fetchData({
     url: 'api/course',
     method: 'GET',

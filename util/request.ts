@@ -27,8 +27,6 @@ interface FetchOptions {
 }
 
 const fetchData = async ({ url, method, params }: FetchOptions) => {
-  console.log();
-
   let token = '';
 
   if (typeof window === 'undefined') {

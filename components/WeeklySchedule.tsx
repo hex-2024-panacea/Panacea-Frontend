@@ -1,70 +1,108 @@
-import React from 'react';
-import dayjs from 'dayjs';
+import React, { useState, useEffect } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isBetween from 'dayjs/plugin/isBetween';
+import weekday from 'dayjs/plugin/weekday';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import 'dayjs/locale/zh-tw'; // 載入中文語系
 
-interface RecurrenceSchedule {
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isBetween);
+dayjs.extend(weekday);
+dayjs.extend(localizedFormat);
+dayjs.locale('zh-tw');
+
+interface ScheduleData {
   startedAt: string;
   endedAt: string;
 }
 
+interface TimeSlot {
+  label: string;
+  start: number;
+  end: number;
+}
+
 interface WeeklyScheduleProps {
-  data: RecurrenceSchedule[];
+  data: ScheduleData[];
 }
 
 const WeeklySchedule = ({ data }: WeeklyScheduleProps) => {
-  const timeSlots = ['上午', '下午', '傍晚', '深夜'];
-  const timeRange = ['06:00~12:00', '12:00~18:00', '18:00~24:00', '00:00~06:00'];
+  const [weekDates, setWeekDates] = useState<Dayjs[]>([]);
 
-  const getTimeSlotIndex = (hour: number) => {
-    if (hour >= 6 && hour < 12) return 0;
-    if (hour >= 12 && hour < 18) return 1;
-    if (hour >= 18 && hour < 24) return 2;
-    if (hour >= 0 && hour < 6) return 3;
-    return -1;
-  };
+  useEffect(() => {
+    const today = dayjs();
+    console.log(dayjs('2024-06-28T20:00:00.00Z').format('YYYY-MM-DD'));
 
-  const renderTimeSlots = () => {
-    const slots = Array(4)
-      .fill(null)
-      .map(() => Array(7).fill(false));
+    const startOfWeekDate = today.startOf('week');
+    console.log({ startOfWeekDate });
 
-    data.forEach((schedule) => {
-      const start = dayjs(schedule.startedAt);
-      const end = dayjs(schedule.endedAt);
+    const dates = Array.from({ length: 7 }, (_, i) => startOfWeekDate.add(i, 'day'));
+    setWeekDates(dates);
+  }, []);
 
-      for (let d = start.day(); d <= end.day(); d++) {
-        const startIndex = d === start.day() ? getTimeSlotIndex(start.hour()) : 0;
-        const endIndex = d === end.day() ? getTimeSlotIndex(end.hour()) : 3;
+  const timeSlots: TimeSlot[] = [
+    { label: '上午', start: 6, end: 12 },
+    { label: '下午', start: 12, end: 18 },
+    { label: '傍晚', start: 18, end: 24 },
+    { label: '深夜', start: 0, end: 6 },
+  ];
 
-        for (let i = startIndex; i <= endIndex; i++) {
-          slots[i][d] = true;
-        }
-      }
+  const isTimeSlotOccupied = (date: Dayjs, startHour: number, endHour: number): boolean => {
+    if (!Array.isArray(data)) return false; // 添加类型检查
+
+    return data.some((slot) => {
+      const slotStart = dayjs(slot.startedAt);
+      const slotEnd = dayjs(slot.endedAt);
+      const timeSlotStart = date.hour(startHour);
+      const timeSlotEnd = date.hour(endHour);
+
+      return (
+        slotStart.isSame(date, 'day') &&
+        (timeSlotStart.isBetween(slotStart, slotEnd, null, '[]') ||
+          timeSlotEnd.isBetween(slotStart, slotEnd, null, '[]') ||
+          (slotStart.isSameOrBefore(timeSlotStart) && slotEnd.isSameOrAfter(timeSlotEnd)))
+      );
     });
-
-    return slots.map((day, i) => (
-      <div key={i} className="flex">
-        <div className="flex h-16 w-16 items-center justify-center border">
-          {timeSlots[i]}
-          <div className="text-xs">{timeRange[i]}</div>
-        </div>
-        {day.map((booked, j) => (
-          <div key={j} className={`h-16 w-16 border ${booked ? 'bg-blue-200' : 'bg-white'}`}></div>
-        ))}
-      </div>
-    ));
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex">
-        <div className="h-16 w-16"></div>
-        {['週日', '週一', '週二', '週三', '週四', '週五', '週六'].map((day) => (
-          <div key={day} className="flex h-16 w-16 items-center justify-center border font-bold">
-            {day}
-          </div>
-        ))}
+    <div className="absolute right-[20px] z-20 rounded-lg bg-[#fff] p-4 shadow">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="border border-[#fff] p-2"></th>
+            {weekDates.map((date, index) => (
+              <th key={index} className="border border-[#fff] bg-[#F4F5F5] p-2">
+                {dayjs().weekday(index).format('ddd')}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {timeSlots.map((slot, slotIndex) => (
+            <tr key={slotIndex}>
+              <td className="border border-[#fff] bg-[#F4F5F5] p-2 text-right">
+                <p className="body">{slot.label}</p>
+                <p className="small-body">{`${slot.start}:00-${slot.end}:00`}</p>
+              </td>
+              {weekDates.map((date, dateIndex) => (
+                <td
+                  key={dateIndex}
+                  className={`border border-[#fff] p-2 ${
+                    isTimeSlotOccupied(date, slot.start, slot.end) ? 'bg-[#BCE3FA]' : 'bg-[#FAFAFA]'
+                  }`}
+                ></td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="mt-2 text-right">
+        <button className="text-blue-500">瀏覽更多 &gt;</button>
       </div>
-      {renderTimeSlots()}
     </div>
   );
 };
