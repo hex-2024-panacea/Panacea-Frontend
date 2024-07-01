@@ -1,43 +1,68 @@
-import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosHeaders } from 'axios';
-import Cookies from 'js-cookie';
-// import cloneDeep from 'lodash.clonedeep';
+let cookiesModule;
 
-interface ApiResponse<T = any> {
-  data: T;
+if (typeof window === 'undefined') {
+  // 在伺服器端
+  import('next/headers')
+    .then(({ cookies }) => {
+      cookiesModule = cookies;
+    })
+    .catch((error) => {
+      console.error('Failed to import next/headers:', error);
+    });
+} else {
+  // 在客戶端
+  import('js-cookie')
+    .then((module) => {
+      cookiesModule = module.default;
+    })
+    .catch((error) => {
+      console.error('Failed to import js-cookie:', error);
+    });
 }
 
-// 請求
-export const request = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 30000,
-});
+interface FetchOptions {
+  url: string;
+  method: string;
+  params?: Record<string, any>;
+}
 
-const requestBeforeSend = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-  config.params = {
-    ...config.params,
-  };
-  const headers = new AxiosHeaders(config.headers);
-  headers.set('Authorization', `Bearer ${Cookies.get('token')}`);
-  config.headers = headers;
+const fetchData = async ({ url, method, params }: FetchOptions) => {
+  console.log();
 
-  return config;
-};
+  let token = '';
 
-const requestBeforeResponse = <T>(response: AxiosResponse<ApiResponse<T>>): T => {
+  if (typeof window === 'undefined') {
+    // 在伺服器端
+    token = cookiesModule().get('token').value;
+  } else {
+    // 在客戶端
+    token = cookiesModule.get('token');
+  }
+
   try {
-    const { data } = response.data;
-    return data;
-  } catch (err) {
-    console.log(err, 'err?');
-    throw err;
+    let apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${url}`;
+
+    if (params) {
+      const queryParams = new URLSearchParams(params).toString();
+      apiUrl += `?${queryParams}`;
+    }
+
+    const response = await fetch(`${apiUrl}`, {
+      method, // 或其他 HTTP 方法
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error('Internal Server Error');
   }
 };
 
-// Apply the interceptors
-request.interceptors.request.use(requestBeforeSend, (err) => Promise.reject(err));
-request.interceptors.response.use(
-  (response) => requestBeforeResponse(response),
-  async (err) => {
-    return Promise.reject(err);
-  },
-);
+export default fetchData;

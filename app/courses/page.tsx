@@ -1,10 +1,13 @@
 'use client';
 
+import { useEffect } from 'react';
 import Image from 'next/image';
-import bg from '../../public/bg-pagetop.svg';
-import star from '../../public/star.svg';
-import comment from '../../public/comment.svg';
-import iconCourse from '../../public/icon-course-card.svg';
+import bg from '@/public/bg-pagetop.svg';
+import star from '@/public/star.svg';
+import comment from '@/public/comment.svg';
+import iconCourse from '@/public/icon-course-card.svg';
+import WeeklySchedule from '@/components/WeeklySchedule';
+import { getCourseList } from '@/app/api/course';
 import { Select, Pagination } from 'antd';
 import type { PaginationProps } from 'antd';
 
@@ -95,6 +98,11 @@ const coursesList: CourseList[] = [
 ];
 
 export default function CoursesPage() {
+  useEffect(() => {
+    document.title = '課程列表';
+    getCourseList({ page: 1 });
+  }, []);
+
   return (
     <main className="min-h-[100dvh] pt-[80px]">
       <header
@@ -135,7 +143,7 @@ export default function CoursesPage() {
           />
         </div>
         <ul className="mb-[60px] flex w-full max-w-[1296px] flex-col gap-[40px]">
-          {coursesList.map(({ id, imgSrc, title, rating, commentsNum, description }) => (
+          {coursesList.map(({ id, imgSrc, title, rating, commentsNum, description, recurrenceSchedules }) => (
             <li
               key={id}
               className="relative flex gap-[25px] rounded-[36px] bg-gradient-to-r from-[#fff] to-[rgba(23,127,172,0.1)] p-[36px]"
@@ -165,6 +173,7 @@ export default function CoursesPage() {
                   </a>
                 </div>
               </div>
+              <WeeklySchedule data={recurrenceSchedules} />
             </li>
           ))}
         </ul>

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
+import { getUserInfo } from '@/app/api/user';
 interface NavbarOption {
   title: string;
   url: string;
@@ -37,6 +38,9 @@ const getUserInfoHandler = async () => {
     },
   ];
   if (token) {
+    const test = await getUserInfo();
+    console.log({ test });
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/user-info`, {
       headers: {
         Authorization: `Bearer ${token}`,
