@@ -1,15 +1,18 @@
 'use client';
 
-import { getCourseList } from '@/app/api/course';
+import { useEffect, useState } from 'react';
+import type { PaginationProps } from 'antd';
+import { Pagination, Select } from 'antd';
+import Image from 'next/image';
 import WeeklySchedule from '@/components/WeeklySchedule';
+
 import bg from '@/public/bg-pagetop.svg';
 import comment from '@/public/comment.svg';
 import iconCourse from '@/public/icon-course-card.svg';
 import star from '@/public/star.svg';
-import type { PaginationProps } from 'antd';
-import { Pagination, Select } from 'antd';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+
+import { getCourseList } from '@/app/api/course';
+import { CourseList } from '@/types/courses';
 
 const recurrenceSchedules = [
   {
@@ -48,7 +51,7 @@ const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => 
 };
 
 export default function CoursesPage() {
-  const [coursesList, setData] = useState<object[]>([]);
+  const [coursesList, setData] = useState<CourseList[]>([]);
 
   useEffect(() => {
     document.title = '課程列表';

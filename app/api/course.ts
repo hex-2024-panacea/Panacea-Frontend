@@ -1,19 +1,8 @@
-import fetchData from '../../util/request';
+import fetchData from '@/util/request';
+import { ResponesBody } from '@/types/request';
+import { CourseList, CourseListParams } from '@/types/courses';
 
-interface ResponesBody {
-  code: number;
-  data: object[];
-  message: string;
-  meta: object;
-}
-
-interface CourseListParams {
-  page: number;
-  courseName?: string;
-  category?: string;
-}
-
-export const getCourseList = async (params: CourseListParams): Promise<ResponesBody> => {
+export const getCourseList = async (params: CourseListParams): Promise<ResponesBody<CourseList[]>> => {
   return fetchData({
     url: 'api/course',
     method: 'GET',

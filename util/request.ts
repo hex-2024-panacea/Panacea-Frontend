@@ -1,3 +1,5 @@
+import { FetchOptions } from '@/types/request';
+
 let cookiesModule: any;
 
 if (typeof window === 'undefined') {
@@ -18,13 +20,6 @@ if (typeof window === 'undefined') {
     .catch((error) => {
       console.error('Failed to import js-cookie:', error);
     });
-}
-
-interface FetchOptions {
-  url: string;
-  method: string;
-  params?: Record<string, any>;
-  data?: Record<string, any>;
 }
 
 const fetchData = async ({ url, method, params, data }: FetchOptions) => {
