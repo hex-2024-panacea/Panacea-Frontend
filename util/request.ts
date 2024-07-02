@@ -1,4 +1,4 @@
-let cookiesModule;
+let cookiesModule: any;
 
 if (typeof window === 'undefined') {
   // 在伺服器端
@@ -24,11 +24,13 @@ interface FetchOptions {
   url: string;
   method: string;
   params?: Record<string, any>;
+  data?: Record<string, any>;
 }
 
-const fetchData = async ({ url, method, params }: FetchOptions) => {
+const fetchData = async ({ url, method, params, data }: FetchOptions) => {
   let token = '';
 
+  // 取得 token
   if (typeof window === 'undefined') {
     // 在伺服器端
     token = cookiesModule().get('token').value;
@@ -38,6 +40,15 @@ const fetchData = async ({ url, method, params }: FetchOptions) => {
   }
 
   try {
+    // 初始化 options
+    const requestOptions: RequestInit = {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
     let apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${url}`;
 
     if (params) {
@@ -45,8 +56,13 @@ const fetchData = async ({ url, method, params }: FetchOptions) => {
       apiUrl += `?${queryParams}`;
     }
 
+    if (data) {
+      requestOptions.body = JSON.stringify(data);
+    }
+
+    // 發送請求
     const response = await fetch(`${apiUrl}`, {
-      method, // 或其他 HTTP 方法
+      method,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -57,6 +73,7 @@ const fetchData = async ({ url, method, params }: FetchOptions) => {
       throw new Error('Network response was not ok');
     }
 
+    // 回傳資料
     return await response.json();
   } catch (error) {
     throw new Error('Internal Server Error');

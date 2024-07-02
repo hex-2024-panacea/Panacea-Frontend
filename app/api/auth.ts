@@ -1,7 +1,7 @@
-import { request } from '../../util/request';
+import fetchData from '../../util/request';
 
 export const login = (postData: { email: string; password: string }) =>
-  request({
+  fetchData({
     url: 'api/auth/sign-in',
     method: 'POST',
     data: postData,
