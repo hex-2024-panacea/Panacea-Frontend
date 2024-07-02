@@ -1,4 +1,5 @@
 import { FetchOptions } from '@/types/request';
+import { redirect } from 'next/navigation';
 
 let cookiesModule: any;
 
@@ -28,7 +29,10 @@ const fetchData = async ({ url, method, params, data }: FetchOptions) => {
   // 取得 token
   if (typeof window === 'undefined') {
     // 在伺服器端
-    token = cookiesModule().get('token').value;
+    token = cookiesModule().get('token')?.value;
+    if (!token) {
+      redirect('/login');
+    }
   } else {
     // 在客戶端
     token = cookiesModule.get('token');
