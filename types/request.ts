@@ -4,3 +4,10 @@ export interface FetchOptions {
   params?: Record<string, any>;
   data?: Record<string, any>;
 }
+
+export interface ResponesBody<T> {
+  code: number;
+  data: T;
+  message: string;
+  meta: object;
+}
