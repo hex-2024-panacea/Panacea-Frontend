@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import type { UploadFile } from 'antd';
+import type { UploadFile, UploadProps } from 'antd';
 import Image from 'next/image';
 
 interface UploadComponentProps {
@@ -11,6 +11,7 @@ interface UploadComponentProps {
   defaultFileList: UploadFile[];
   action: string;
   maxCount?: number;
+  listType?: UploadProps['listType'];
 }
 
 const UploadComponent: React.FC<UploadComponentProps> = ({
@@ -19,6 +20,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
   onLoadingChange,
   action,
   maxCount = 1,
+  listType = 'picture-card',
 }) => {
   const [loading, setLoading] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -39,6 +41,8 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
       const imageUrl = await file.response.data.imageUrl;
       setImageUrl(imageUrl);
       onLoadingChange(false);
+      // TODO: 這裡要改成從 api 取得的 imageUrl
+      onFileListChange(fileList); // 更新父元件的 fileList
     } else if (file.status === 'error') {
       message.error(`${file.name} file upload failed.`);
       onLoadingChange(false);
@@ -46,7 +50,8 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
       onLoadingChange(false);
     }
     setFileList(fileList);
-    onFileListChange(fileList); // 更新父元件的 fileList
+    // TODO: 這裡 onFileListChange 改為在 done 時觸發
+    // onFileListChange(fileList); // 更新父元件的 fileList
     setLoading(false);
   };
 
@@ -80,7 +85,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
   return (
     <>
       <Upload
-        listType="picture-card"
+        listType={listType}
         beforeUpload={beforeUpload}
         onChange={handleUploadChange}
         action={action}
@@ -91,7 +96,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
         {uploadButton}
       </Upload>
       <Modal open={previewVisible} title="Preview Image" footer={null} onCancel={() => setPreviewVisible(false)}>
-        <Image alt="example" style={{ width: '100%' }} src={previewImage} />
+        <Image alt="example" width={500} height={500} style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>
   );
