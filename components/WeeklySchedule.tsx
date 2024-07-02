@@ -30,10 +30,8 @@ const WeeklySchedule = ({ data }: WeeklyScheduleProps) => {
 
   useEffect(() => {
     const today = dayjs();
-    console.log(dayjs('2024-06-28T20:00:00.00Z').format('YYYY-MM-DD'));
 
     const startOfWeekDate = today.startOf('week');
-    console.log({ startOfWeekDate });
 
     const dates = Array.from({ length: 7 }, (_, i) => startOfWeekDate.add(i, 'day'));
     setWeekDates(dates);
@@ -47,7 +45,7 @@ const WeeklySchedule = ({ data }: WeeklyScheduleProps) => {
   ];
 
   const isTimeSlotOccupied = (date: Dayjs, startHour: number, endHour: number): boolean => {
-    if (!Array.isArray(data)) return false; // 添加类型检查
+    if (!Array.isArray(data)) return false;
 
     return data.some((slot) => {
       const slotStart = dayjs(slot.startedAt);

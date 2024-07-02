@@ -1,77 +1,109 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isBetween from 'dayjs/plugin/isBetween';
 
+dayjs.extend(weekOfYear);
 dayjs.extend(isBetween);
 
-interface Booking {
+interface TimeSlot {
   startTime: string;
   endTime: string;
 }
 
 interface ScheduleData {
-  available: Booking[];
-  booked: Booking[];
+  available: TimeSlot[];
+  booked: TimeSlot[];
 }
 
-interface ScheduleProps {
-  data: ScheduleData;
-}
+const WeeklySchedule: React.FC = () => {
+  const [currentWeek, setCurrentWeek] = useState(dayjs());
+  const [scheduleData, setScheduleData] = useState<ScheduleData>({
+    available: [],
+    booked: [],
+  });
 
-const Schedule = ({ data }: ScheduleProps) => {
-  const [currentWeekStart, setCurrentWeekStart] = useState(dayjs().startOf('week').add(1, 'day'));
+  useEffect(() => {
+    // Fetch data here
+    // For now, we'll use mock data
+    setScheduleData({
+      available: [
+        { startTime: '2024-07-02T14:00:00Z', endTime: '2024-07-02T16:00:00Z' },
+        { startTime: '2024-07-05T14:00:00Z', endTime: '2024-07-05T16:00:00Z' },
+        { startTime: '2024-07-08T14:00:00Z', endTime: '2024-07-08T16:00:00Z' },
+        { startTime: '2024-03-29T14:00:00Z', endTime: '2024-03-29T16:00:00Z' },
+      ],
+      booked: [
+        { startTime: '2024-07-03T09:00:00Z', endTime: '2024-07-03T12:00:00Z' },
+        { startTime: '2024-07-03T18:00:00Z', endTime: '2024-07-03T20:00:00Z' },
+        { startTime: '2024-07-02T14:00:00Z', endTime: '2024-07-02T16:00:00Z' },
+        { startTime: '2024-07-08T18:00:00Z', endTime: '2024-07-08T20:00:00Z' },
+        { startTime: '2024-03-28T18:00:00Z', endTime: '2024-03-28T20:00:00Z' },
+      ],
+    });
+  }, [currentWeek]);
 
-  const handlePrevWeek = () => {
-    setCurrentWeekStart(currentWeekStart.subtract(1, 'week'));
+  const weekStart = currentWeek.startOf('week');
+  const weekEnd = currentWeek.endOf('week');
+  const days = Array.from({ length: 7 }, (_, i) => weekStart.add(i, 'day'));
+
+  const hours = Array.from({ length: 18 }, (_, i) => i + 7); // 7:00 to 23:00
+
+  const isTimeSlotBooked = (day: dayjs.Dayjs, hour: number) => {
+    const slotStart = day.hour(hour).minute(0).second(0);
+    const slotEnd = slotStart.add(1, 'hour');
+    return scheduleData.booked.some((slot) => {
+      const bookingStart = dayjs(slot.startTime);
+      const bookingEnd = dayjs(slot.endTime);
+      return (
+        slotStart.isBetween(bookingStart, bookingEnd, null, '[]') ||
+        slotEnd.isBetween(bookingStart, bookingEnd, null, '[]')
+      );
+    });
   };
 
-  const handleNextWeek = () => {
-    setCurrentWeekStart(currentWeekStart.add(1, 'week'));
-  };
-
-  const renderTimeSlots = (day: dayjs.Dayjs) => {
-    const hours = [];
-    for (let i = 7; i <= 11; i += 0.5) {
-      const time = day.hour(Math.floor(i)).minute((i % 1) * 60);
-      const isBooked = data.booked.some((booking) =>
-        time.isBetween(dayjs(booking.startTime), dayjs(booking.endTime), 'minute', '[)'),
-      );
-      hours.push(
-        <div key={time.format()} className={`h-8 w-16 border ${isBooked ? 'bg-blue-200' : 'bg-white'}`}>
-          {time.format('HH:mm')}
-        </div>,
-      );
-    }
-    return hours;
-  };
-
-  const renderDays = () => {
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      const day = currentWeekStart.add(i, 'day');
-      days.push(
-        <div key={day.format()} className="flex flex-col items-center">
-          <div className="font-bold">{day.format('ddd MM/DD')}</div>
-          {renderTimeSlots(day)}
-        </div>,
-      );
-    }
-    return days;
+  const navigateWeek = (direction: 'prev' | 'next') => {
+    setCurrentWeek((prev) => prev.add(direction === 'prev' ? -1 : 1, 'week'));
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="mb-4 flex w-60 justify-between">
-        <button onClick={handlePrevWeek} className="bg-gray-200 rounded p-2">
-          Prev Week
+    <div className="container mx-auto p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <button onClick={() => navigateWeek('prev')} className="p-2 text-2xl font-bold">
+          &lt;
         </button>
-        <button onClick={handleNextWeek} className="bg-gray-200 rounded p-2">
-          Next Week
+        <span className="text-lg font-semibold">
+          {weekStart.format('YYYY/MM/DD')} - {weekEnd.format('YYYY/MM/DD')}
+        </span>
+        <button onClick={() => navigateWeek('next')} className="p-2 text-2xl font-bold">
+          &gt;
         </button>
       </div>
-      <div className="flex w-full justify-around">{renderDays()}</div>
+      <div className="grid grid-cols-8 gap-1">
+        <div className="col-span-1"></div>
+        {days.map((day) => (
+          <div key={day.format()} className="col-span-1 text-center font-semibold">
+            {day.format('ddd')}
+            <br />
+            {day.format('MM/DD')}
+          </div>
+        ))}
+        {hours.map((hour) => (
+          <React.Fragment key={hour}>
+            <div className="col-span-1 pr-2 text-right">{`${hour}:00`}</div>
+            {days.map((day) => (
+              <div
+                key={`${day.format()}-${hour}`}
+                className={`col-span-1 h-8 border ${isTimeSlotBooked(day, hour) ? 'bg-[#BCE3FA]' : 'bg-[#fff]'}`}
+              ></div>
+            ))}
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default Schedule;
+export default WeeklySchedule;
