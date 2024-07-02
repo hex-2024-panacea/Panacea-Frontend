@@ -1,4 +1,4 @@
-import { request } from '../../util/request';
+import fetchData from '../../util/request';
 
 interface UserInfo {
   name: string;
@@ -12,7 +12,7 @@ interface UserInfo {
 }
 
 export const getUserInfo = async (): Promise<UserInfo> => {
-  return request({
+  return fetchData({
     url: 'api/auth/user-info',
     method: 'GET',
   });
