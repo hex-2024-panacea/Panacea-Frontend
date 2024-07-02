@@ -33,13 +33,6 @@ const recurrenceSchedules = [
   },
 ];
 
-// interface pagination {
-//   currentPage: number;
-//   total: number;
-//   perpage: number;
-//   lastPage: number;
-// }
-
 const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => {
   if (type === 'prev') {
     return <a>Previous</a>;
@@ -59,7 +52,7 @@ export default function CoursesPage() {
     const getData = async () => {
       const { data, meta } = await getCourseList({ page: 1 });
       setData(data);
-      console.log(data, meta);
+      console.log(meta);
     };
     getData();
   }, []);
