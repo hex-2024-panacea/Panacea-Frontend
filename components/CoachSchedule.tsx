@@ -26,8 +26,6 @@ const WeeklySchedule: React.FC = () => {
   });
 
   useEffect(() => {
-    // Fetch data here
-    // For now, we'll use mock data
     setScheduleData({
       available: [
         { startTime: '2024-07-02T14:00:00Z', endTime: '2024-07-02T16:00:00Z' },

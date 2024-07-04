@@ -1,4 +1,5 @@
 import fetchData from '../../util/request';
+import { ResponesBody } from '@/types/request';
 
 interface UserInfo {
   name: string;
@@ -8,10 +9,9 @@ interface UserInfo {
   isCoach: boolean;
   coachStatus: string;
   code: string;
-  // Add other fields as necessary
 }
 
-export const getUserInfo = async (): Promise<UserInfo> => {
+export const getUserInfo = async (): Promise<ResponesBody<UserInfo>> => {
   return fetchData({
     url: 'api/auth/user-info',
     method: 'GET',

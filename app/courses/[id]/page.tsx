@@ -1,4 +1,4 @@
-import { getCourseDetails } from '@/app/api/course';
+import { getCourseDetails, getCoachCourseTime } from '@/app/api/course';
 import CoachSchedule from '@/components/CoachSchedule';
 import Image from 'next/image';
 
@@ -12,26 +12,20 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const {
     data: {
       name,
-      coach: { name: coachName, specialty },
+      coach: { _id, name: coachName, specialty },
       coverImage,
       description,
       coursePrice,
     },
   } = await getCourseDetails(params.id);
-  const courseSchedule = {
-    availale: [
-      {
-        startTime: '2024-05-05T04:00:00Z',
-        endTime: '2024-05-05T05:00:00Z',
-      },
-    ],
-    booked: [
-      {
-        startTime: '2024-05-05T04:00:00Z',
-        endTime: '2024-05-05T05:00:00Z',
-      },
-    ],
-  };
+
+  const { data: courseTime } = await getCoachCourseTime(_id, params.id);
+  const courseSchedule = courseTime.reduce(
+    (pre, { available, booked }) => {
+      return { available: [...pre.available, ...available], booked: [...pre.booked, ...booked] };
+    },
+    { available: [], booked: [] },
+  );
 
   console.log(coursePrice, courseSchedule);
 
