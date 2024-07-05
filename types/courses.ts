@@ -46,3 +46,16 @@ export interface CourseDetails {
     price: number;
   }[];
 }
+
+export interface CourseSchedule {
+  available: {
+    _id: string;
+    startTime: string;
+    endTime: string;
+  }[];
+  booked: {
+    _id: string;
+    startTime: string;
+    endTime: string;
+  }[];
+}

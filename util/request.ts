@@ -1,29 +1,18 @@
 import { FetchOptions } from '@/types/request';
 import { redirect } from 'next/navigation';
 
-let cookiesModule: any;
-
-if (typeof window === 'undefined') {
-  // 在伺服器端
-  import('next/headers')
-    .then(({ cookies }) => {
-      cookiesModule = cookies;
-    })
-    .catch((error) => {
-      console.error('Failed to import next/headers:', error);
-    });
-} else {
-  // 在客戶端
-  import('js-cookie')
-    .then((module) => {
-      cookiesModule = module.default;
-    })
-    .catch((error) => {
-      console.error('Failed to import js-cookie:', error);
-    });
+async function getCookieModule() {
+  if (typeof window === 'undefined') {
+    const { cookies } = await import('next/headers');
+    return cookies;
+  } else {
+    const cookieModule = await import('js-cookie');
+    return cookieModule.default;
+  }
 }
 
 const fetchData = async ({ url, method, params, data }: FetchOptions) => {
+  const cookiesModule: any = await getCookieModule();
   let token = '';
 
   // 取得 token

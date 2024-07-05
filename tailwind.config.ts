@@ -1,17 +1,16 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
     colors: {
@@ -24,14 +23,21 @@ const config: Config = {
         50: '#fafafa',
       },
       primary: {
-        500: '#177fac',
+        100: '#e9f6fd',
         200: '#bce3fa',
+        300: '#8fcff7',
+        400: '#62bcf4',
+        500: '#177fac',
+        600: '#146690',
+        700: '#114d74',
+        800: '#0d3458',
+        900: '#0a1b3c',
       },
       second: {
         400: '#ffd300',
         200: '#fff7d1',
-      }
-    }
+      },
+    },
   },
   plugins: [],
 };

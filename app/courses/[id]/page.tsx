@@ -1,4 +1,4 @@
-import { getCourseDetails } from '@/app/api/course';
+import { getCourseDetails, getCoachCourseTime } from '@/app/api/course';
 import CoachSchedule from '@/components/CoachSchedule';
 import Image from 'next/image';
 
@@ -12,26 +12,20 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const {
     data: {
       name,
-      coach: { name: coachName, specialty },
+      coach: { _id, name: coachName, specialty },
       coverImage,
       description,
       coursePrice,
     },
   } = await getCourseDetails(params.id);
-  const courseSchedule = {
-    availale: [
-      {
-        startTime: '2024-05-05T04:00:00Z',
-        endTime: '2024-05-05T05:00:00Z',
-      },
-    ],
-    booked: [
-      {
-        startTime: '2024-05-05T04:00:00Z',
-        endTime: '2024-05-05T05:00:00Z',
-      },
-    ],
-  };
+
+  const { data: courseTime } = await getCoachCourseTime(_id, params.id);
+  const courseSchedule = courseTime.reduce(
+    (pre, { available, booked }) => {
+      return { available: [...pre.available, ...available], booked: [...pre.booked, ...booked] };
+    },
+    { available: [], booked: [] },
+  );
 
   console.log(coursePrice, courseSchedule);
 
@@ -42,7 +36,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         className="flex h-[400px] items-center justify-center bg-cover"
       />
       <main className="mt-[-80px] flex items-center justify-center rounded-tl-[100px] bg-[#fff] pt-[80px]">
-        <div className="mb-[60px] flex w-[776px] flex-col gap-[40px] px-[36px]">
+        <div className="mb-[60px] flex flex-col gap-[40px] px-[36px]">
           <div>
             <h4 className="heading4 text-primary-500">{specialty}</h4>
             <h1 className="heading1">{coachName}</h1>
@@ -52,7 +46,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             <h2 className="heading2 mb-[20px]">{name}</h2>
             <p className="small-body text-[#525252]">{description}</p>
           </div>
-          <CoachSchedule />
+          <CoachSchedule data={courseSchedule} />
         </div>
         <div className="mt-[-200px] flex flex-col items-start justify-center">
           <div className="mb-[50px] box-border rounded-[8px] bg-[#fff] p-[9px]">

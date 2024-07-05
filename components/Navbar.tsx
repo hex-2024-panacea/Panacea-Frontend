@@ -17,12 +17,14 @@ interface UserInfoType {
 const getUserInfoHandler = async () => {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value;
+
   let userInfo: UserInfoType = {
     name: '',
     email: '',
     isCoach: false,
     isAdmin: false,
   };
+
   let navBarData: NavbarOption[] = [
     {
       title: '成為教練',
@@ -37,17 +39,11 @@ const getUserInfoHandler = async () => {
       url: '/signup',
     },
   ];
-  if (token) {
-    const test = await getUserInfo();
-    console.log({ test });
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/user-info`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const projects = await res.json();
-    userInfo = projects.data;
+  if (token) {
+    const { data } = await getUserInfo();
+
+    userInfo = data;
     if (userInfo.isCoach) {
       navBarData = [
         {
@@ -76,7 +72,7 @@ const getUserInfoHandler = async () => {
       ];
     }
   }
-  return { token, userInfo, navBarData };
+  return { navBarData };
 };
 export default async function Navbar() {
   const { navBarData } = await getUserInfoHandler();
