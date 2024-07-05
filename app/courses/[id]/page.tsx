@@ -36,7 +36,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         className="flex h-[400px] items-center justify-center bg-cover"
       />
       <main className="mt-[-80px] flex items-center justify-center rounded-tl-[100px] bg-[#fff] pt-[80px]">
-        <div className="mb-[60px] flex w-[776px] flex-col gap-[40px] px-[36px]">
+        <div className="mb-[60px] flex flex-col gap-[40px] px-[36px]">
           <div>
             <h4 className="heading4 text-primary-500">{specialty}</h4>
             <h1 className="heading1">{coachName}</h1>
@@ -46,7 +46,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             <h2 className="heading2 mb-[20px]">{name}</h2>
             <p className="small-body text-[#525252]">{description}</p>
           </div>
-          <CoachSchedule />
+          <CoachSchedule data={courseSchedule} />
         </div>
         <div className="mt-[-200px] flex flex-col items-start justify-center">
           <div className="mb-[50px] box-border rounded-[8px] bg-[#fff] p-[9px]">
