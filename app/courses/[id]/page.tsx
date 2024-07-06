@@ -1,5 +1,6 @@
 import { getCourseDetails, getCoachCourseTime } from '@/app/api/course';
 import CoachSchedule from '@/components/CoachSchedule';
+import CoursePrice from './components/CoursePrice';
 import Image from 'next/image';
 
 interface CourseDetailPageProps {
@@ -52,11 +53,14 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           <div className="mb-[50px] box-border rounded-[8px] bg-[#fff] p-[9px]">
             <Image src={coverImage} alt="icon" width={400} height={400} className="h-[400px] w-[306px] object-cover" />
           </div>
-          <ul className="flex flex-col gap-[25px]">
+
+          <CoursePrice coursePrice={coursePrice} courseId={params.id} name={name}></CoursePrice>
+          {/* <ul className="flex flex-col gap-[25px]">
             {coursePrice.map(({ count, price }, index) => (
               <li
                 key={index}
-                className="box-border flex w-[410px] items-end justify-between rounded-[8px] bg-[#fff] bg-[rgba(188,227,250,0.2)] px-[16px] pb-[23px] pt-[36px]"
+                // onClick={() => getPurchaseInfo({ courseId: params.id, count, price })}
+                className="box-border flex w-[410px] cursor-pointer items-end justify-between rounded-[8px] bg-[#fff] bg-[rgba(188,227,250,0.2)] px-[16px] pb-[23px] pt-[36px] hover:bg-[rgba(188,227,250,0.5)]"
               >
                 <p className="body text-[#525252]">
                   {count} 堂 {count * 60} 分鐘
@@ -67,7 +71,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 </p>
               </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       </main>
     </main>

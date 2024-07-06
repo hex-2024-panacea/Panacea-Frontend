@@ -49,13 +49,7 @@ const fetchData = async ({ url, method, params, data }: FetchOptions) => {
     }
 
     // 發送請求
-    const response = await fetch(`${apiUrl}`, {
-      method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(apiUrl, requestOptions);
 
     if (!response.ok) {
       throw new Error('Network response was not ok');
