@@ -36,8 +36,8 @@ export default function SideBar() {
       icon: <UserOutlined />,
       children: [
         { key: '3', label: <Link href={'/profile/coach'}>教練檔案</Link> },
-        { key: '4', label: <Link href={'/profile/course-manage'}>課程管理</Link> },
-        { key: '5', label: <Link href={'/profile/course-list'}>課程清單</Link> },
+        { key: '4', label: <Link href={'/profile/coach/course-manage'}>課程管理</Link> },
+        { key: '5', label: <Link href={'/profile/coach/course-list'}>課程清單</Link> },
       ],
     },
     {

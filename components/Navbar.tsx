@@ -1,7 +1,12 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
+import Cookies from 'js-cookie';
 import { getUserInfo } from '@/app/api/user';
+// import userStore from '@/stores/user';
+import { useEffect, useState, useCallback } from 'react';
+
 interface NavbarOption {
   title: string;
   url: string;
@@ -14,18 +19,17 @@ interface UserInfoType {
   isAdmin: boolean;
 }
 
-const getUserInfoHandler = async () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('token')?.value;
-
-  let userInfo: UserInfoType = {
+export default function Navbar() {
+  const [userInfo, setUserInfo] = useState<UserInfoType>({
     name: '',
     email: '',
     isCoach: false,
     isAdmin: false,
-  };
+  });
 
-  let navBarData: NavbarOption[] = [
+  console.log(userInfo);
+
+  const [navBarData, setNavBarData] = useState<NavbarOption[]>([
     {
       title: '成為教練',
       url: '/signup',
@@ -38,44 +42,50 @@ const getUserInfoHandler = async () => {
       title: '註冊',
       url: '/signup',
     },
-  ];
+  ]);
 
-  if (token) {
-    const { data } = await getUserInfo();
+  const getUserInfoHandler = useCallback(async () => {
+    const token = Cookies.get('token');
 
-    userInfo = data;
-    if (userInfo.isCoach) {
-      navBarData = [
-        {
-          title: '刊登課程',
-          url: '/profile/coach/course-manage',
-        },
-        {
-          title: userInfo.name,
-          url: '/profile',
-        },
-      ];
-    } else {
-      navBarData = [
-        {
-          title: '成為教練',
-          url: '/apply-coach',
-        },
-        {
-          title: '',
-          url: '/login',
-        },
-        {
-          title: userInfo.name,
-          url: '/profile',
-        },
-      ];
+    if (token) {
+      const { data } = await getUserInfo();
+
+      setUserInfo(data);
+
+      if (data.isCoach) {
+        setNavBarData([
+          {
+            title: '刊登課程',
+            url: '/profile/coach/course-manage',
+          },
+          {
+            title: data.name,
+            url: '/profile',
+          },
+        ]);
+      } else {
+        setNavBarData([
+          {
+            title: '成為教練',
+            url: '/apply-coach',
+          },
+          {
+            title: '',
+            url: '/login',
+          },
+          {
+            title: data.name,
+            url: '/profile',
+          },
+        ]);
+      }
     }
-  }
-  return { navBarData };
-};
-export default async function Navbar() {
-  const { navBarData } = await getUserInfoHandler();
+  }, []);
+
+  useEffect(() => {
+    getUserInfoHandler();
+  }, [getUserInfoHandler]);
+
   return (
     <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-center bg-[#FFF] pb-[23px] pt-[30px] shadow-sm">
       <div className="flex w-full max-w-[1296px] items-center justify-between">
