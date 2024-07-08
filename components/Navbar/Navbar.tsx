@@ -2,28 +2,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { getUserInfo } from '@/app/api/user';
+import UserInfoInitializer from './UserInfoInit';
+import { UserInfo } from '@/types/user';
+
 interface NavbarOption {
   title: string;
   url: string;
 }
 
-interface UserInfoType {
-  name: string;
-  email: string;
-  isCoach: boolean;
-  isAdmin: boolean;
-}
+let userInfo: UserInfo;
 
 const getUserInfoHandler = async () => {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value;
-
-  let userInfo: UserInfoType = {
-    name: '',
-    email: '',
-    isCoach: false,
-    isAdmin: false,
-  };
 
   let navBarData: NavbarOption[] = [
     {
@@ -44,6 +35,7 @@ const getUserInfoHandler = async () => {
     const { data } = await getUserInfo();
 
     userInfo = data;
+
     if (userInfo.isCoach) {
       navBarData = [
         {
@@ -72,12 +64,15 @@ const getUserInfoHandler = async () => {
       ];
     }
   }
-  return { navBarData };
+
+  return { navBarData, userInfo };
 };
 export default async function Navbar() {
-  const { navBarData } = await getUserInfoHandler();
+  const { navBarData, userInfo } = await getUserInfoHandler();
+
   return (
     <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-center bg-[#FFF] pb-[23px] pt-[30px] shadow-sm">
+      <UserInfoInitializer userInfo={userInfo} />
       <div className="flex w-full max-w-[1296px] items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="cursor-pointer">

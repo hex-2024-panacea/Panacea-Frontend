@@ -1,21 +1,46 @@
 import { create } from 'zustand';
+import { UserInfo } from '@/types/user';
 
-interface UserInfo {
-  avatar: string;
-  name: string;
-  email: string;
-  isAdmin: boolean;
-  isCoach: boolean;
-  setUserInfo: (userInfo: Partial<UserInfo>) => void;
+interface UserInfoWithSetter extends UserInfo {
+  setUserInfo: (userInfo: UserInfo) => void;
 }
 
-const userStore = create<UserInfo>((set) => ({
+const userStore = create<UserInfoWithSetter>((set) => ({
+  _id: '',
+  birthday: '',
+  coachStatus: '',
   avatar: '',
   name: '',
   email: '',
   isAdmin: false,
   isCoach: false,
-  setUserInfo: (userInfo) => set((state) => ({ ...state, ...userInfo })),
+  certifiedDocuments: [],
+  earnings: 0,
+  actualAmount: 0,
+  approvalStatus: '',
+  reason: '',
+  language: [],
+  education: {
+    startDate: '',
+    endDate: '',
+    schoolName: '',
+    major: '',
+    degree: '',
+    _id: '',
+  },
+  specialty: '',
+  subject: '',
+  workExperience: {
+    startYear: '',
+    endYear: '',
+    startMonth: '',
+    endMonth: '',
+    department: '',
+    position: '',
+    title: '',
+    _id: '',
+  },
+  setUserInfo: (userInfo: Partial<UserInfo>) => set((state) => ({ ...state, ...userInfo })),
 }));
 
 export default userStore;
