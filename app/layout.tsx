@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ConfigProvider } from 'antd';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
-import Navbar  from '../components/Navbar';
-import "./globals.css";
+import Navbar from '../components/Navbar/Navbar';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -59,27 +59,22 @@ export default function RootLayout({
         }}
       >
         <body className={inter.className}>
-        <Navbar/>
-        <AntdRegistry>{children}</AntdRegistry>
-        <footer className='flex justify-center body py-[40px] bg-primary-500'>
-          <div className='flex justify-between max-w-[1296px] w-full'>
-            <ul>
-              {
-                footerOptions.map(({url, title}, index) => (
-                  <li key={index} className='inline-block mr-5'>
-                    <a
-                      href={url}
-                      className='text-[#FAFAFA]'
-                    >
+          <Navbar />
+          <AntdRegistry>{children}</AntdRegistry>
+          <footer className="body flex justify-center bg-primary-500 py-[40px]">
+            <div className="flex w-full max-w-[1296px] justify-between">
+              <ul>
+                {footerOptions.map(({ url, title }, index) => (
+                  <li key={index} className="mr-5 inline-block">
+                    <a href={url} className="text-[#FAFAFA]">
                       {title}
                     </a>
                   </li>
-                ))
-              }
-            </ul>
-            <p className='text-[#FAFAFA]'>Panacea © All Rights Reserved.</p>
-          </div>
-        </footer>
+                ))}
+              </ul>
+              <p className="text-[#FAFAFA]">Panacea © All Rights Reserved.</p>
+            </div>
+          </footer>
         </body>
       </ConfigProvider>
     </html>
