@@ -55,13 +55,13 @@ const BookingCourseCard = () => {
     return <Skeleton active />;
   }
   return (
-    <div className="flex max-w-[650px] gap-5">
+    <div className="mb-10 flex w-full flex-wrap gap-5">
       {courses.length ? (
         courses.map((course) => (
           <Card
             className="cursor-pointer hover:shadow-md"
             key={course._id}
-            style={{ width: 300, marginTop: 16 }}
+            style={{ width: 300 }}
             cover={!loading && <Image alt="coverImage" width={300} height={150} src={course.course.coverImage} />}
             onClick={() => linkToCrouse(course._id)}
           >
@@ -71,7 +71,7 @@ const BookingCourseCard = () => {
                 description={
                   <ul>
                     <li>教練: {course.coach.name}</li>
-                    <li>預約日期: {dayjs('2024-06-28T19:00:00.000Z').format('YYYY/MM/DD')}</li>
+                    <li>預約日期: {dayjs(course.startTime).format('YYYY/MM/DD')}</li>
                     <li>
                       預約時間: {dayjs(course.startTime).format('HH:mm')} - {dayjs(course.endTime).format('HH:mm')}
                     </li>
