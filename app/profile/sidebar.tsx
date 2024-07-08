@@ -4,7 +4,23 @@ import Image from 'next/image';
 import userStore from '@/stores/user';
 import { LogoutOutlined, IdcardOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
+import { Menu, message } from 'antd';
+import Cookies from 'js-cookie';
+import { logout } from '@/app/api/logout';
+
+// handle logout
+const handleLogout = async () => {
+  const res = await logout();
+  if (res.code !== 200) {
+    message.error(res.message);
+    return;
+  }
+  message.success(res.message);
+  // redirect to home page
+  window.location.href = '/';
+  // clear user token from cookies
+  Cookies.remove('token');
+};
 
 export default function SideBar() {
   const { name, isCoach } = userStore();
@@ -59,7 +75,9 @@ export default function SideBar() {
     },
   ];
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
+    if (e.key === 'logout') {
+      handleLogout();
+    }
   };
   return (
     <aside className="mb-10 h-full w-64">

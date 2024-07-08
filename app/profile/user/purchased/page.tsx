@@ -4,9 +4,6 @@ import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import PurchasedCourseCard from './components/PurchasedCourseCard';
 
-// const onChange = (key: string) => {
-//   console.log(key);
-// };
 const items: TabsProps['items'] = [
   {
     key: 'success',
