@@ -93,7 +93,7 @@ const UploadComponent: React.FC<UploadComponentProps> = ({
         onPreview={handlePreview}
         maxCount={maxCount}
       >
-        {uploadButton}
+        {fileList.length >= maxCount ? null : uploadButton}
       </Upload>
       <Modal open={previewVisible} title="Preview Image" footer={null} onCancel={() => setPreviewVisible(false)}>
         <Image alt="example" width={500} height={500} style={{ width: '100%' }} src={previewImage} />

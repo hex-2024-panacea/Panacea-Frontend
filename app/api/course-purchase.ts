@@ -7,9 +7,10 @@ interface PurchasePostData {
   amount: number;
 }
 
-export const setCoursePurchase = (postData: PurchasePostData) =>
-  fetchData({
+export const setCoursePurchase = async (postData: PurchasePostData) => {
+  return await fetchData({
     url: 'api/coach/course/purchase',
     method: 'POST',
     data: postData,
   });
+};

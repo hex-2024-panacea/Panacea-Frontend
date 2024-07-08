@@ -7,13 +7,13 @@ export const convertCourseStatus = (time: string, isCanceled: boolean) => {
   */
   const now = dayjs();
   const startTime = dayjs(time);
+  if (isCanceled) {
+    return '已取消';
+  }
   if (now.isBefore(startTime)) {
     return '尚未開始';
   }
   if (now.isAfter(startTime)) {
     return '已完成';
-  }
-  if (isCanceled) {
-    return '已取消';
   }
 };
