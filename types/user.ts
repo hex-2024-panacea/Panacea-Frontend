@@ -40,3 +40,36 @@ export interface UserInfo {
   workExperience: WorkExperience;
   description?: string;
 }
+
+export interface Course {
+  _id: string;
+  courseId: string;
+  name: string;
+  price: string;
+  totalPrice: string;
+  purchaseCount: string;
+  remainingCount: number;
+  bookingCount: number;
+  status: string;
+  paymentType: string;
+  payTime: string;
+  createdAt: string;
+  imageUrl: string;
+  course: {
+    coach: {
+      name: string;
+      avatar: string;
+      _id: string;
+    };
+    _id: string;
+    name: string;
+    coverImage: string;
+    description: string;
+    category: Array<string>;
+    subCategory: Array<string>;
+  };
+}
+
+export interface PurchasedPageProps {
+  status: string;
+}

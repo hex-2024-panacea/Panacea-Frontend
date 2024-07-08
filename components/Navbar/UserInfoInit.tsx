@@ -8,7 +8,7 @@ export default function UserInfoInitializer({ userInfo }: { userInfo: UserInfo }
   const { setUserInfo } = userStore();
 
   useEffect(() => {
-    if (userInfo.name) {
+    if (userInfo?.name) {
       setUserInfo(userInfo);
     }
   }, [userInfo, setUserInfo]);

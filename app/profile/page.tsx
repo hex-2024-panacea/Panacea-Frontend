@@ -1,17 +1,20 @@
 'use client';
 
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useState, useEffect } from 'react';
 import type { UploadFile } from 'antd';
 import UploadComponent from '@/components/Upload';
+import userStore from '@/stores/user';
+import { updateUser } from '@/app/api/update-user';
 
 export default function ProfilePage() {
+  const { name, email, avatar } = userStore();
   const [loading, setLoading] = useState(false);
   const [isChange, setIsChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [profileImageUrl, setProfileImageUrl] = useState('');
+
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
     setLoading(true);
     try {
       // Process filteredValues (without rememberMe)
@@ -19,7 +22,12 @@ export default function ProfilePage() {
       const { email, ...filteredValues } = values;
       const fetchData = { ...filteredValues, avatar: profileImageUrl };
       console.log('🚀 ~ onFinish ~ fetchData:', fetchData);
-      // await loginUser(values);
+      const res = await updateUser(fetchData);
+      if (res.code === 200) {
+        message.success(res.message);
+      } else {
+        message.error(res.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -27,8 +35,6 @@ export default function ProfilePage() {
 
   const handleFileListChange = (fileList: any[]) => {
     const { imageUrl } = fileList[0]?.response.data;
-    console.log('🚀 ~ handleFileListChange ~ fileList:', fileList);
-    console.log('🚀 ~ handleFileListChange ~ imageUrl:', imageUrl);
     setProfileImageUrl(imageUrl);
   };
   const handleLoadingChange = (loading: boolean) => {
@@ -41,10 +47,10 @@ export default function ProfilePage() {
         uid: '',
         name: '',
         status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        url: avatar,
       },
     ]);
-  }, []);
+  }, [avatar]);
   return (
     <main>
       <div className="flex gap-x-10">
@@ -58,7 +64,7 @@ export default function ProfilePage() {
           />
         </div>
         <div>
-          <Form className="w-full" layout="vertical" onFinish={onFinish}>
+          <Form initialValues={{ name, email }} className="w-full" layout="vertical" onFinish={onFinish}>
             <Form.Item label="姓名" name="name" rules={[{ required: true, message: '請輸入' }]}>
               <Input />
             </Form.Item>
