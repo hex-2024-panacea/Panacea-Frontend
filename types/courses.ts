@@ -59,3 +59,24 @@ export interface CourseSchedule {
     endTime: string;
   }[];
 }
+
+export interface BookingCourse {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+    avatar: string;
+  };
+  course: {
+    _id: string;
+    name: string;
+    coverImage: string;
+  };
+  startTime: string;
+  endTime: string;
+  meetingUrl: string;
+  order: string;
+  isCanceled: boolean;
+  userCancelReason: string;
+  coachCancelReason: string;
+}

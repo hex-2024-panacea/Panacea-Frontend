@@ -64,6 +64,7 @@ const getUserInfoHandler = async () => {
       ];
     }
   }
+  console.log(userInfo);
 
   return { navBarData, userInfo };
 };
