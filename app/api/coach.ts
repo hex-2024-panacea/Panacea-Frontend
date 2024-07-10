@@ -1,9 +1,9 @@
 import fetchData from '@/util/request';
-import { ResponesBody } from '@/types/request';
+import { ResponseBody } from '@/types/request';
 import { CourseList } from '@/types/courses';
 
 // 取得教練授課課程
-export const apiGetTeachCourseList = async (): Promise<ResponesBody<CourseList[]>> => {
+export const apiGetTeachCourseList = async (): Promise<ResponseBody<CourseList[]>> => {
   return fetchData({
     url: 'api/coach/booking-course',
     method: 'GET',
@@ -11,7 +11,7 @@ export const apiGetTeachCourseList = async (): Promise<ResponesBody<CourseList[]
 };
 
 // 取得教練授課詳情
-export const apiGetCoachCourseDetail = async (id: string): Promise<ResponesBody<any>> => {
+export const apiGetCoachCourseDetail = async (id: string): Promise<ResponseBody<any>> => {
   return fetchData({
     url: `api/coach/booking-course/${id}`,
     method: 'GET',
@@ -19,7 +19,7 @@ export const apiGetCoachCourseDetail = async (id: string): Promise<ResponesBody<
 };
 
 // 教練取得課程列表
-export const apiGetCoachCourseList = async (): Promise<ResponesBody<CourseList[]>> => {
+export const apiGetCoachCourseList = async (): Promise<ResponseBody<CourseList[]>> => {
   return fetchData({
     url: '/api/coach/course',
     method: 'GET',
@@ -27,7 +27,7 @@ export const apiGetCoachCourseList = async (): Promise<ResponesBody<CourseList[]
 };
 
 // 教練取得課程授課時間
-export const apiGetCoachCourseTime = async (params: any, id: string): Promise<ResponesBody<any>> => {
+export const apiGetCoachCourseTime = async (params: any, id: string): Promise<ResponseBody<any>> => {
   return fetchData({
     url: `/api/ccoach/course/${id}/schedule`,
     method: 'GET',
@@ -36,7 +36,7 @@ export const apiGetCoachCourseTime = async (params: any, id: string): Promise<Re
 };
 
 // 教練建立課程
-export const apiCreateCourse = async (data: any): Promise<ResponesBody<any>> => {
+export const apiCreateCourse = async (data: any): Promise<ResponseBody<any>> => {
   return fetchData({
     url: 'api/coach/course',
     method: 'POST',
@@ -45,7 +45,7 @@ export const apiCreateCourse = async (data: any): Promise<ResponesBody<any>> => 
 };
 
 // 教練取消課程
-export const apiCancelCourse = async (data: any, id: string): Promise<ResponesBody<any>> => {
+export const apiCancelCourse = async (data: any, id: string): Promise<ResponseBody<any>> => {
   return fetchData({
     url: `api/coach/booking-course/${id}/cancel`,
     method: 'POST',
@@ -54,7 +54,7 @@ export const apiCancelCourse = async (data: any, id: string): Promise<ResponesBo
 };
 
 // 教練建立編輯課程授課時間
-export const apiCreateCourseTime = async (data: any, id: string): Promise<ResponesBody<any>> => {
+export const apiCreateCourseTime = async (data: any, id: string): Promise<ResponseBody<any>> => {
   return fetchData({
     url: `api/coach/course/${id}/schedule`,
     method: 'POST',
@@ -63,7 +63,7 @@ export const apiCreateCourseTime = async (data: any, id: string): Promise<Respon
 };
 
 // 教練建立編輯課程授課時間
-export const apiCreateCoursePrice = async (data: any, id: string): Promise<ResponesBody<any>> => {
+export const apiCreateCoursePrice = async (data: any, id: string): Promise<ResponseBody<any>> => {
   return fetchData({
     url: `api/coach/course/${id}/price`,
     method: 'POST',
@@ -72,7 +72,7 @@ export const apiCreateCoursePrice = async (data: any, id: string): Promise<Respo
 };
 
 // 刪除課程
-export const apiDeleteCourse = async (id: string, params: any): Promise<ResponesBody<any>> => {
+export const apiDeleteCourse = async (id: string, params: any): Promise<ResponseBody<any>> => {
   return fetchData({
     url: `api/coach/course/${id}`,
     method: 'DELETE',
