@@ -25,7 +25,9 @@ const Dropdown = () => {
     {
       key: 'user',
       label: name,
-      icon: <Image src={avatar} alt={'user'} width={30} height={30} className="rounded-full" />,
+      icon: (
+        <Image src={avatar ? avatar : '/avatar.svg'} alt={'user'} width={30} height={30} className="rounded-full" />
+      ),
     },
     {
       type: 'divider',
