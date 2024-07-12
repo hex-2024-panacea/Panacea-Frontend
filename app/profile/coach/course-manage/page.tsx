@@ -29,8 +29,10 @@ const CourseManagePage: React.FC = () => {
   return (
     <main style={{ marginBottom: '40px' }}>
       <div>
-            新增課程
-        </div>
+        <Typography.Title level={2}>課程管理</Typography.Title>
+        <Button type="primary" onClick={linkToCreate}>
+          新增課程
+        </Button>
         <List
           grid={{ gutter: 16, column: 3 }}
           dataSource={data}
