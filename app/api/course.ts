@@ -2,7 +2,7 @@ import fetchData from '@/util/request';
 import { ResponesBody } from '@/types/request';
 import { CourseList, CourseListParams, CourseDetails, CourseSchedule } from '@/types/courses';
 
-export const getCourseList = async (params: CourseListParams): Promise<ResponesBody<CourseList[]>> => {
+export const getCourseList = async (params: CourseListParams): Promise<ResponesBody<CourseList>> => {
   return fetchData({
     url: 'api/course',
     method: 'GET',
@@ -26,4 +26,3 @@ export const getCoachCourseTime = async (
     method: 'GET',
   });
 };
-

@@ -4,20 +4,22 @@ export interface CourseListParams {
   category?: string;
 }
 
-export interface CourseList {
+export interface Course {
   _id: string;
   name: string;
   coach: string;
   coverImage: string;
   description: string;
-  category: [string];
-  subCategory: [string];
+  category: [string] | [];
+  subCategory: [string] | [];
   startDate: string;
   isActive: boolean;
   rating: number;
   createdAt: string;
   updatedAt: string;
 }
+
+export type CourseList = Course[];
 
 export interface CourseDetails {
   _id: string;
