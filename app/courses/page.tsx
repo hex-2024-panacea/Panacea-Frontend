@@ -44,7 +44,7 @@ const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => 
 };
 
 export default function CoursesPage() {
-  const [coursesList, setData] = useState<CourseList[]>([]);
+  const [coursesList, setData] = useState<CourseList>([]);
 
   useEffect(() => {
     document.title = '課程列表';

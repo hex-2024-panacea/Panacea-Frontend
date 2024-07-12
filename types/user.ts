@@ -39,6 +39,9 @@ export interface UserInfo {
   specialty: string;
   workExperience: WorkExperience;
   description?: string;
+  bankAccount?: string;
+  bankName?: string;
+  bankCode?: string;
 }
 
 export interface Course {

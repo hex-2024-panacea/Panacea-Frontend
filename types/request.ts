@@ -5,7 +5,7 @@ export interface FetchOptions {
   data?: Record<string, any>;
 }
 
-export interface ResponesBody<T> {
+export interface ResponseBody<T> {
   code: number;
   data: T;
   message: string;

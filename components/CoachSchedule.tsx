@@ -79,25 +79,8 @@ const CoachSchedule = ({ data }: CoachScheduleProps) => {
     }
   };
 
-  const onBookCourse = (startTime: string, endTime: string) => {
-    // 訂閱 API
-    console.log({ startTime, endTime });
-  };
-
   const resetToCurrentWeek = () => {
     setCurrentWeek(dayjs());
-  };
-
-  const handleTimeSlotClick = (day: dayjs.Dayjs, hour: number) => {
-    if (getTimeSlotStatus(day, hour) === 'available') {
-      const startTime = day.hour(hour).minute(0).second(0).toISOString();
-      const endTime = day
-        .hour(hour + 1)
-        .minute(0)
-        .second(0)
-        .toISOString();
-      onBookCourse(startTime, endTime);
-    }
   };
 
   return (
@@ -148,7 +131,6 @@ const CoachSchedule = ({ data }: CoachScheduleProps) => {
                           ? 'cursor-pointer bg-[#E5E5E5] hover:bg-[#d2d2d2]'
                           : 'bg-[#FAFAFA]'
                     }`}
-                    onClick={() => handleTimeSlotClick(day, hour)}
                   ></div>
                 );
               })}

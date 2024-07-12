@@ -28,6 +28,14 @@ body {
 }
 
 @layer utilities {
+  .touch-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+  }
   .text-balance {
     text-wrap: balance;
   }
@@ -66,5 +74,12 @@ body {
   .tiny-body {
     font-size: 12px;
     line-height: 18px;
+  }
+  .btn-base {
+    background: #177fac;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 8px;
+    cursor: pointer;
   }
 }
