@@ -6,10 +6,11 @@ interface BookingCoursePostData {
   order: string;
 }
 
-export const bookingCourse = async (postData: BookingCoursePostData) => {
-  return await fetchData({
+export const bookingCourse = async (data: BookingCoursePostData) => {
+  const response = await fetchData({
     url: `api/user/booking-course`,
     method: 'POST',
-    data: postData,
+    data,
   });
+  return response;
 };

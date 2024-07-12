@@ -6,6 +6,7 @@ import { convertCourseStatus } from '../utils';
 import Link from 'next/link';
 import axios from 'axios';
 import { cancelBookingCourse } from '@/app/api/cancel-course';
+import { useRouter } from 'next/navigation';
 import { Button, Skeleton, Tag, Modal, Input, message } from 'antd';
 
 interface Course {
@@ -45,23 +46,9 @@ const isWithin12HoursBefore = (time: string) => {
   return now.isAfter(twelveHoursBefore) && now.isBefore(targetTime);
 };
 
-// 取消預約 api
-const cancelBooking = async (courseId: string, postData: CancelBookingPostData) => {
-  try {
-    const res = await cancelBookingCourse(courseId, postData);
-    if (res.code === 200) {
-      message.success(res.message);
-    } else {
-      message.error(res.message);
-    }
-  } catch (error) {
-    console.error('Error cancel booking:', error);
-    message.error('Failed to cancel booking');
-  }
-};
-
 export default function BookingCoursesPage({ params }: { params: { id: string } }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [userCancelReason, setUserCancelReason] = useState('');
   const [bookingId, setBookingId] = useState('');
@@ -83,20 +70,36 @@ export default function BookingCoursesPage({ params }: { params: { id: string } 
     fetchData();
   }, [params.id]);
 
+  // 取消預約 api
+  const cancelBooking = async (courseId: string, postData: CancelBookingPostData) => {
+    try {
+      const res = await cancelBookingCourse(courseId, postData);
+      if (res.code === 200) {
+        message.success(res.message);
+        router.push('/profile/user/booking');
+      } else {
+        message.error(res.message);
+      }
+      setOpen(false);
+      setConfirmLoading(false);
+    } catch (error) {
+      console.error('Error cancel booking:', error);
+      message.error('Failed to cancel booking');
+    }
+  };
+
   const showModal = () => {
     setOpen(true);
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserCancelReason(e.target.value);
   };
-  const handleOk = async () => {
+  const handleOk = () => {
     setConfirmLoading(true);
     const postData = {
       userCancelReason,
     };
-    await cancelBooking(bookingId, postData);
-    setOpen(false);
-    setConfirmLoading(false);
+    cancelBooking(bookingId, postData);
   };
 
   const handleCancel = () => {
