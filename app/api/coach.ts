@@ -21,7 +21,7 @@ export const apiGetCoachCourseDetail = async (id: string): Promise<ResponseBody<
 // 教練取得課程列表
 export const apiGetCoachCourseList = async (): Promise<ResponseBody<CourseList>> => {
   return fetchData({
-    url: '/api/coach/course',
+    url: 'api/coach/course',
     method: 'GET',
   });
 };
@@ -29,7 +29,7 @@ export const apiGetCoachCourseList = async (): Promise<ResponseBody<CourseList>>
 // 教練取得課程授課時間
 export const apiGetCoachCourseTime = async (params: any, id: string): Promise<ResponseBody<any>> => {
   return fetchData({
-    url: `/api/coach/course/${id}/schedule`,
+    url: `api/ccoach/course/${id}/schedule`,
     method: 'GET',
     params,
   });

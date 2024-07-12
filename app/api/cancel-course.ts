@@ -4,10 +4,11 @@ interface CancelBookingCoursePostData {
   userCancelReason: string;
 }
 
-export const cancelBookingCourse = async (courseId: string, postData: CancelBookingCoursePostData) => {
-  return await fetchData({
+export const cancelBookingCourse = async (courseId: string, data: CancelBookingCoursePostData) => {
+  const response = await fetchData({
     url: `api/user/booking-course/${courseId}/cancel`,
     method: 'POST',
-    data: postData,
+    data,
   });
+  return response;
 };

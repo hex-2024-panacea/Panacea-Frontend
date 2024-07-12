@@ -1,24 +1,49 @@
-// import Image from "next/image"
+'use client';
+import React, { useEffect, useState } from 'react';
 import { apiGetCoachCourseList } from '@/app/api/coach';
 import CoachCard from '@/components/CoachCard';
+import { useRouter } from 'next/navigation';
+import { Button, List, Typography } from 'antd';
 
-export default async function CourseManagePage() {
-  const { data, meta } = await apiGetCoachCourseList();
-  console.log(meta);
+const CourseManagePage: React.FC = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, meta } = await apiGetCoachCourseList();
+      console.log('🚀 ~ fetchData ~ data:', data);
+      setData(data);
+      setLoading(false);
+      console.log(meta);
+    };
+
+    fetchData();
+  }, []);
+
+  const linkToCreate = () => {
+    router.push('/profile/coach/course-manage/create');
+  };
 
   return (
-    <main className="mb-[40px]">
+    <main style={{ marginBottom: '40px' }}>
       <div>
-        <div className="mb-[30px] flex items-center justify-between">
-          <h2 className="heading2">課程管理</h2>
-          <button>新增課程</button>
+            新增課程
         </div>
-        <ul className="flex flex-wrap gap-[30px]">
-          {data.map((item) => (
-            <li key={item._id}>{<CoachCard data={item} />}</li>
-          ))}
-        </ul>
+        <List
+          grid={{ gutter: 16, column: 3 }}
+          dataSource={data}
+          loading={loading}
+          renderItem={(item) => (
+            <List.Item key={item._id}>
+              <CoachCard data={item} />
+            </List.Item>
+          )}
+        />
       </div>
     </main>
   );
-}
+};
+
+export default CourseManagePage;
