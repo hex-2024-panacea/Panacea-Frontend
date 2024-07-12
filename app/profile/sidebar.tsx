@@ -63,7 +63,7 @@ export default function SideBar() {
       key: 'admin',
       label: '系統管理員',
       icon: <SettingOutlined />,
-      children: [{ key: '6', label: <Link href={'/admin'}>進入後台</Link> }],
+      children: [{ key: '6', label: <Link href={'/admin/user'}>進入後台</Link> }],
     },
     {
       type: 'divider',
