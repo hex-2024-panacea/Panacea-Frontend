@@ -61,7 +61,7 @@ importers:
         specifier: ^7.13.0
         version: 7.14.1(eslint@8.57.0)(typescript@5.5.2)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.0
       eslint-config-next:
         specifier: 14.2.3

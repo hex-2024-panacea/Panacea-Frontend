@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import bg from '../public/bg-search.svg';
+import Search from '@/components/HomePage/Search';
 
 interface LandingOption {
   title: string;
@@ -71,30 +71,7 @@ const whyPanacea: LandingOption[] = [
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
-      <section
-        style={{ backgroundImage: `url(${bg.src})` }}
-        className="mb-[80px] flex h-[640px] w-full items-center justify-center gap-[130px] bg-cover pt-[95px]"
-      >
-        <div>
-          <div className="mb-[40px]">
-            <h2 className="heading1 font-bold">尋找最適合你的課程</h2>
-            <span className="heading6">讓我們陪著你尋找答案</span>
-          </div>
-
-          <div className="relative">
-            <input
-              type="text"
-              className="w-full rounded-[80px] border-[2px] border-primary-500 p-[18px]"
-              placeholder="請輸入想尋找的課程"
-            />
-            <button className="absolute right-[8px] top-[50%] flex translate-y-[-50%] items-center rounded-[80px] bg-primary-500 px-[16px] py-[8px]">
-              <Image className="mr-[8px]" src="/icon-search.svg" alt="icon" width={20} height={20} />
-              <span className="body text-[#fafafa]">搜尋</span>
-            </button>
-          </div>
-        </div>
-        <Image src="/web-search.svg" alt="icon" width={525} height={410} />
-      </section>
+      <Search />
       <section className="mb-[80px]">
         <h3 className="heading1 mb-[72px] flex justify-center font-bold">
           熱門

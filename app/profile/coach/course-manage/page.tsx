@@ -1,47 +1,51 @@
-// import Image from "next/image"
+'use client';
+import React, { useEffect, useState } from 'react';
 import { apiGetCoachCourseList } from '@/app/api/coach';
+import CoachCard from '@/components/CoachCard';
+import { useRouter } from 'next/navigation';
+import { Button, List, Typography } from 'antd';
 
-export default async function CourseMamagePage() {
-  // const failedImages: string[] = [];
-  const { data, meta } = await apiGetCoachCourseList();
-  console.log(meta);
-  // const handleImageError = (id: string) => {
-  //   failedImages.push(id);
-  // }
+const CourseManagePage: React.FC = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, meta } = await apiGetCoachCourseList();
+      console.log('🚀 ~ fetchData ~ data:', data);
+      setData(data);
+      setLoading(false);
+      console.log(meta);
+    };
+
+    fetchData();
+  }, []);
+
+  const linkToCreate = () => {
+    router.push('/profile/coach/course-manage/create');
+  };
 
   return (
-    <main>
+    <main style={{ marginBottom: '40px' }}>
       <div>
-        <div>
-          <h2 className="heading2">課程管理</h2>
-          <button>新增課程</button>
-        </div>
-        <ul>
-          {data.map(({ _id, name, description, coverImage, category, createdAt, isActive }) => (
-            <li key={_id}>
-              {coverImage}
-              {/* { coverImage &&
-                <Image
-                src={failedImages.includes(_id) ? 'https://via.placeholder.com/306x400' : coverImage}
-                alt={`Cover image for ${name}`}
-                width={306}
-                height={400}
-                className="h-[400px] w-[306px] object-cover rounded-lg"
-                onError={() => handleImageError(_id)}
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAJzAN1wVXANwAAAABJRU5ErkJggg=="
-              />
-              } */}
-              <h3>{name}</h3>
-              <p>{description}</p>
-              <p>{category}</p>
-              <p>{createdAt}</p>
-              <p>{isActive}</p>
-            </li>
-          ))}
-          <li></li>
-        </ul>
+        <Typography.Title level={2}>課程管理</Typography.Title>
+        <Button type="primary" onClick={linkToCreate}>
+          新增課程
+        </Button>
+        <List
+          grid={{ gutter: 16, column: 3 }}
+          dataSource={data}
+          loading={loading}
+          renderItem={(item) => (
+            <List.Item key={item._id}>
+              <CoachCard data={item} />
+            </List.Item>
+          )}
+        />
       </div>
     </main>
   );
-}
+};
+
+export default CourseManagePage;
