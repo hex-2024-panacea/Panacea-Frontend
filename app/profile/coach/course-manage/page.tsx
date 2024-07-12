@@ -9,7 +9,7 @@ export default async function CourseManagePage() {
   return (
     <main className="mb-[40px]">
       <div>
-        <div className="mb-[30px]">
+        <div className="mb-[30px] flex items-center justify-between">
           <h2 className="heading2">課程管理</h2>
           <button>新增課程</button>
         </div>

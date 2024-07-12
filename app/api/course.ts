@@ -1,8 +1,8 @@
 import fetchData from '@/util/request';
-import { ResponesBody } from '@/types/request';
+import { ResponseBody } from '@/types/request';
 import { CourseList, CourseListParams, CourseDetails, CourseSchedule } from '@/types/courses';
 
-export const getCourseList = async (params: CourseListParams): Promise<ResponesBody<CourseList>> => {
+export const getCourseList = async (params: CourseListParams): Promise<ResponseBody<CourseList>> => {
   return fetchData({
     url: 'api/course',
     method: 'GET',
@@ -10,7 +10,7 @@ export const getCourseList = async (params: CourseListParams): Promise<ResponesB
   });
 };
 
-export const getCourseDetails = async (id: string): Promise<ResponesBody<CourseDetails>> => {
+export const getCourseDetails = async (id: string): Promise<ResponseBody<CourseDetails>> => {
   return fetchData({
     url: `api/course/${id}/details`,
     method: 'GET',
@@ -20,7 +20,7 @@ export const getCourseDetails = async (id: string): Promise<ResponesBody<CourseD
 export const getCoachCourseTime = async (
   coachId: string,
   courseId: string,
-): Promise<ResponesBody<CourseSchedule[]>> => {
+): Promise<ResponseBody<CourseSchedule[]>> => {
   return fetchData({
     url: `api/coach/${coachId}/course/${courseId}/schedule`,
     method: 'GET',

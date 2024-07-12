@@ -75,4 +75,11 @@ body {
     font-size: 12px;
     line-height: 18px;
   }
+  .btn-base {
+    background: #177fac;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
 }

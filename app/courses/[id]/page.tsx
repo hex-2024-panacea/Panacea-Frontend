@@ -28,8 +28,6 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
     { available: [], booked: [] },
   );
 
-  console.log(coursePrice, courseSchedule);
-
   return (
     <main className="min-h-[100dvh] pt-[80px]">
       <header
