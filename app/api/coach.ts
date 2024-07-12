@@ -3,7 +3,7 @@ import { ResponseBody } from '@/types/request';
 import { CourseList } from '@/types/courses';
 
 // 取得教練授課課程
-export const apiGetTeachCourseList = async (): Promise<ResponseBody<CourseList[]>> => {
+export const apiGetTeachCourseList = async (): Promise<ResponseBody<CourseList>> => {
   return fetchData({
     url: 'api/coach/booking-course',
     method: 'GET',
@@ -19,7 +19,7 @@ export const apiGetCoachCourseDetail = async (id: string): Promise<ResponseBody<
 };
 
 // 教練取得課程列表
-export const apiGetCoachCourseList = async (): Promise<ResponseBody<CourseList[]>> => {
+export const apiGetCoachCourseList = async (): Promise<ResponseBody<CourseList>> => {
   return fetchData({
     url: '/api/coach/course',
     method: 'GET',

@@ -70,14 +70,14 @@ const Dropdown = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <div className="flex cursor-pointer items-center gap-[10px]" onClick={() => setShowDropdown(!showDropdown)}>
         <Image src={avatar ? avatar : '/avatar.svg'} width={32} height={32} alt="Avatar" className="rounded-full" />
         <DownOutlined className={`h-[12px] w-[14px] ${showDropdown ? 'rotate-180' : ''}`} />
         {showDropdown && (
           <Menu
             onClick={handler}
-            className="absolute right-[10px] top-[calc(100%+10px)] z-20 rounded-[12px]"
+            className="absolute right-0 top-[calc(100%+30px)] z-20 rounded-[12px]"
             style={{ width: 200, padding: '10px 0', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' }}
             mode="inline"
             items={items}

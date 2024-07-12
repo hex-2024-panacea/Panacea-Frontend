@@ -37,6 +37,7 @@ const getUserInfoHandler = async () => {
     const { data } = await getUserInfo();
     const { data: notificationData } = await apiGetNotification();
     console.log(notificationData);
+    console.log(data);
 
     userInfo = data;
 

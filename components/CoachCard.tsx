@@ -5,14 +5,14 @@ import { Card, Skeleton } from 'antd';
 // import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dayjs from 'dayjs';
-import { CourseList, BookingCourse } from '@/types/courses';
+import { BookingCourse, Course } from '@/types/courses';
 
 type CoachCardProps = {
-  data: CourseList | BookingCourse;
+  data: Course | BookingCourse;
 };
 
 const CoachCard = ({ data }: CoachCardProps) => {
-  const isCourseList = (data: CourseList | BookingCourse): data is CourseList => {
+  const isCourseList = (data: Course | BookingCourse): data is Course => {
     return 'category' in data;
   };
 
@@ -24,7 +24,7 @@ const CoachCard = ({ data }: CoachCardProps) => {
   //   return isCourseList(data) ? data.coverImage : data.course.coverImage;
   // };
 
-  const getName = (data: CourseList | BookingCourse) => {
+  const getName = (data: Course | BookingCourse) => {
     return isCourseList(data) ? data.name : data.course.name;
   };
 
@@ -54,7 +54,6 @@ const CoachCard = ({ data }: CoachCardProps) => {
                   <li>開始時間: {dayjs(data.startTime).format('YYYY/MM/DD HH:mm')}</li>
                   <li>結束時間: {dayjs(data.endTime).format('YYYY/MM/DD HH:mm')}</li>
                   <li>狀態: {data.isCanceled ? '已取消' : '進行中'}</li>
-                  {data.isCanceled && <li>取消原因: {data.userCancelReason || data.coachCancelReason || '未提供'}</li>}
                 </>
               )}
             </ul>

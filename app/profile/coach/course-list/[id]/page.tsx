@@ -13,13 +13,17 @@ const CoachCourseDetail = async ({ params }: { params: { id: string } }) => {
       startTime,
       endTime,
       isCanceled,
+      userCancelReason,
+      coachCancelReason,
     },
   } = await apiGetCoachCourseDetail(params.id);
 
   return (
     <main className="w-full">
       <div className="flex items-center justify-between">
-        <Link href="/profile/coach/course-list">&lt; 返回課程清單</Link>
+        <Link href="/profile/coach/course-list" className="text-primary-500">
+          &lt; 返回課程清單
+        </Link>
         <Link href={meetingUrl} target="_blank" className="btn-base">
           進入教室
         </Link>
@@ -65,6 +69,12 @@ const CoachCourseDetail = async ({ params }: { params: { id: string } }) => {
           <p className="heading6 mb-[5px] text-neutral-400">課程狀態</p>
           <p className="body">{isCanceled ? '已取消' : '尚未開始'}</p>
         </li>
+        {isCanceled && (
+          <li>
+            <p className="heading6 mb-[5px] text-neutral-400">取消原因</p>
+            <p className="body">{userCancelReason || coachCancelReason}</p>
+          </li>
+        )}
       </ul>
     </main>
   );
