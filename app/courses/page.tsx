@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { PaginationProps } from 'antd';
 import { Pagination, Select } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import WeeklySchedule from '@/components/WeeklySchedule';
 
@@ -35,10 +36,10 @@ const recurrenceSchedules = [
 
 const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => {
   if (type === 'prev') {
-    return <a>Previous</a>;
+    return <LeftOutlined />;
   }
   if (type === 'next') {
-    return <a>Next</a>;
+    return <RightOutlined />;
   }
   return originalElement;
 };
