@@ -36,7 +36,7 @@ const StepFour = () => {
   };
 
   return (
-    <div className="mx-auto flex max-w-[800px] justify-center">
+    <div className="mx-auto mt-5 flex max-w-[800px] justify-center">
       <Form
         form={form}
         initialValues={formData}
@@ -45,11 +45,11 @@ const StepFour = () => {
         onFinish={onFinish}
         validateMessages={validateMessages}
       >
-        <div className="my-5 flex gap-2">
+        {/* <div className="my-5 flex gap-2">
           <Button ghost type="primary" onClick={nextStep}>
             下一步(測試用)
           </Button>
-        </div>
+        </div> */}
         <Form.Item name="file" label="Upload">
           <UploadComponent
             action="/api/upload"

@@ -20,7 +20,7 @@ const StepThree = () => {
   const { education } = formData || {};
 
   return (
-    <div className="mx-auto flex max-w-[800px] justify-center">
+    <div className="mx-auto mt-5 flex max-w-[800px] justify-center">
       <Form
         form={form}
         initialValues={education}
@@ -29,11 +29,11 @@ const StepThree = () => {
         onFinish={onFinish}
         validateMessages={validateMessages}
       >
-        <div className="my-5 flex gap-2">
+        {/* <div className="my-5 flex gap-2">
           <Button ghost type="primary" onClick={nextStep}>
             下一步(測試用)
           </Button>
-        </div>
+        </div> */}
         <div className="flex gap-2">
           <Form.Item name="startDate" className="flex-1" label="開始時間" rules={[{ required: true }]}>
             <DatePicker className="w-full" />

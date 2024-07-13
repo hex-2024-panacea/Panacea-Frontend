@@ -17,7 +17,7 @@ const StepOne = () => {
   };
 
   return (
-    <div className="mx-auto flex max-w-[800px] justify-center">
+    <div className="mx-auto mt-5 flex max-w-[800px] justify-center">
       <Form
         form={form}
         className="w-1/2 max-w-[400px]"
@@ -29,11 +29,11 @@ const StepOne = () => {
         onFinish={onFinish}
         validateMessages={validateMessages}
       >
-        <div className="my-5 flex gap-2">
+        {/* <div className="my-5 flex gap-2">
           <Button ghost type="primary" onClick={nextStep}>
             下一步(測試用)
           </Button>
-        </div>
+        </div> */}
         <Form.Item label="教授科目" name="subject" rules={[{ required: true, message: '請選擇' }]}>
           <Select>
             <Select.Option value="心靈">心靈</Select.Option>
