@@ -29,7 +29,13 @@ const CourseForm: React.FC = () => {
   const onFinish = async (values: any) => {
     const { price, ...courseData } = values;
     // 先建假資料
-    const schedule = [{ startTime: courseScheduleRange.startTime, endTime: courseScheduleRange.endTime }];
+
+    const schedule = [
+      {
+        startTime: dayjs(courseScheduleRange.startTime).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        endTime: dayjs(courseScheduleRange.endTime).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      },
+    ];
     if (coverImageUrl) {
       courseData.coverImage = coverImageUrl;
     } else {
@@ -61,7 +67,6 @@ const CourseForm: React.FC = () => {
   };
 
   const handleCourseScheduleRange = (data: any) => {
-    console.log('🚀 ~ handleCourseScheduleRange ~ data:', data);
     setCourseScheduleRange(data);
   };
   // 假資料
@@ -156,9 +161,12 @@ const CourseForm: React.FC = () => {
       <div className="my-5">
         <CoachScheduleNew data={availableSchedules} sendCourseScheduleRange={handleCourseScheduleRange} />
         {courseScheduleRange && (
-          <div>
-            {dayjs(courseScheduleRange.startTime).format('YYYY/MM/DD HH:mm')} -{' '}
-            {dayjs(courseScheduleRange.endTime).format('YYYY/MM/DD HH:mm')}
+          <div className="body mt-[20px]">
+            <p>選擇的課程時間：</p>
+            <div className="small-body">
+              {dayjs(courseScheduleRange.startTime).format('YYYY/MM/DD HH:mm')} -{' '}
+              {dayjs(courseScheduleRange.endTime).format('YYYY/MM/DD HH:mm')}
+            </div>
           </div>
         )}
       </div>

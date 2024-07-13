@@ -35,7 +35,7 @@ const StepTwo = () => {
   const { workExperience } = formData || {};
 
   return (
-    <div className="mx-auto flex max-w-[800px] justify-center">
+    <div className="mx-auto mt-5 flex max-w-[800px] justify-center">
       <Form
         form={form}
         initialValues={workExperience}
@@ -44,11 +44,11 @@ const StepTwo = () => {
         onFinish={onFinish}
         validateMessages={validateMessages}
       >
-        <div className="my-5 flex gap-2">
+        {/* <div className="my-5 flex gap-2">
           <Button ghost type="primary" onClick={nextStep}>
             下一步(測試用)
           </Button>
-        </div>
+        </div> */}
         <div className="flex">
           <Form.Item className="flex-1" label="開始時間" style={{ marginBottom: 0 }}>
             <Form.Item
