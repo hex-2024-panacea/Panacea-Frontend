@@ -115,7 +115,12 @@ export default function CoachTable(props: { resultData: UserListType }) {
   };
   return (
     <>
-      <Table columns={columns} dataSource={tableData} rowKey={(record) => record._id} />
+      <Table
+        pagination={{ position: ['none', 'bottomCenter'] }}
+        columns={columns}
+        dataSource={tableData}
+        rowKey={(record) => record._id}
+      />
       <Modal
         title="Basic Modal"
         open={isModalOpen}

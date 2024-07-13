@@ -10,11 +10,6 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isBetween);
 dayjs.extend(weekday);
 
-interface ScheduleData {
-  startedAt: string;
-  endedAt: string;
-}
-
 interface TimeSlot {
   label: string;
   start: number;
@@ -22,7 +17,7 @@ interface TimeSlot {
 }
 
 interface WeeklyScheduleProps {
-  data: ScheduleData[];
+  data: any;
 }
 
 const WeeklySchedule = ({ data }: WeeklyScheduleProps) => {

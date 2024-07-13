@@ -1,10 +1,8 @@
-// import CourseTable from '@/components/AdminTable/CourseTable';
-// import { getUserList } from '@/app/api/admin/user';
+import CourseTable from '@/components/AdminTable/CourseTable';
+import { getCourseList } from '@/app/api/admin/course';
 
-// export default async function adminPage() {
-//   const data = await getUserList();
-//   return <CourseTable resultData={data.data} />;
-// }
-export default async function adminPage() {
-  return <div>還沒有資料</div>;
+export default async function coursePage() {
+  const data = await getCourseList();
+  console.log(data.data);
+  return <CourseTable resultData={data.data} />;
 }

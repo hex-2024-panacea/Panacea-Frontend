@@ -4,6 +4,13 @@ export interface CourseListParams {
   category?: string;
 }
 
+export interface Meta {
+  currentPage: number;
+  lastPage: number;
+  perPage: number;
+  total: number;
+}
+
 export interface Course {
   _id: string;
   name: string;
@@ -17,6 +24,11 @@ export interface Course {
   rating: number;
   createdAt: string;
   updatedAt: string;
+  recurrenceSchedules: {
+    _id: string;
+    startTime: string;
+    endTime: string;
+  }[];
 }
 
 export type CourseList = Course[];
