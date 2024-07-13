@@ -12,7 +12,7 @@ const Search = () => {
   const [searchText, setSearchText] = useState('');
   const composingRef = useRef(false);
   const router = useRouter();
-  const { setCourses } = useCourseStore();
+  const { setCourses, setMeta } = useCourseStore();
 
   const handleCompositionStart = () => {
     composingRef.current = true;
@@ -23,9 +23,10 @@ const Search = () => {
   };
 
   const searchCourse = async () => {
-    const { data } = await getCourseList({ page: 1, courseName: searchText });
+    const { data, meta } = await getCourseList({ page: 1, courseName: searchText });
     message.success('搜尋完成');
     setCourses(data);
+    setMeta(meta);
     router.push('/courses');
   };
 
