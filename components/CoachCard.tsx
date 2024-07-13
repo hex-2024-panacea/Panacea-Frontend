@@ -20,9 +20,11 @@ const CoachCard = ({ data }: CoachCardProps) => {
     console.log(courseId);
   };
 
-  // const getCoverImage = (data: CourseList | BookingCourse) => {
-  //   return isCourseList(data) ? data.coverImage : data.course.coverImage;
-  // };
+  const getCoverImage = (data: Course | BookingCourse) => {
+    return isCourseList(data) ? data.coverImage : data.course.coverImage;
+  };
+
+  const coverImage = getCoverImage(data);
 
   const getName = (data: Course | BookingCourse) => {
     return isCourseList(data) ? data.name : data.course.name;
@@ -32,7 +34,7 @@ const CoachCard = ({ data }: CoachCardProps) => {
     <Card
       className="cursor-pointer hover:shadow-md"
       style={{ width: 300 }}
-      cover={<Image alt="coverImage" width={300} height={150} src={'/test.png'} />}
+      cover={<Image alt="coverImage" width={300} height={150} src={coverImage} />}
       onClick={() => linkToCourse(isCourseList(data) ? data._id : data.course._id)}
     >
       <Skeleton loading={false} paragraph={{ rows: 4 }} active>
