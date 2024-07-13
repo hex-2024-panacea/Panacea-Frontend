@@ -85,6 +85,8 @@ export default function CourseDetailPage({ params, searchParams }: CourseDetailP
 
   // 取得選擇的課程時間 ID
   const handleCourseScheduleRange = (data: any) => {
+    console.log(data);
+
     setCourseScheduleRange(data);
   };
 

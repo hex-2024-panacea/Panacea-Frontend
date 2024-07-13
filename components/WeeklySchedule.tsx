@@ -22,6 +22,7 @@ interface WeeklyScheduleProps {
 
 const WeeklySchedule = ({ data }: WeeklyScheduleProps) => {
   const [weekDates, setWeekDates] = useState<Dayjs[]>([]);
+  console.log(data);
 
   useEffect(() => {
     const today = dayjs();

@@ -3,20 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { apiGetCoachCourseList } from '@/app/api/coach';
 import CoachCard from '@/components/CoachCard';
 import { useRouter } from 'next/navigation';
-import { Button, List, Typography } from 'antd';
+import Link from 'next/link';
 
 const CourseManagePage: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, meta } = await apiGetCoachCourseList();
-      console.log('🚀 ~ fetchData ~ data:', data);
+      const { data } = await apiGetCoachCourseList();
       setData(data);
-      setLoading(false);
-      console.log(meta);
     };
 
     fetchData();
@@ -28,21 +24,22 @@ const CourseManagePage: React.FC = () => {
 
   return (
     <main style={{ marginBottom: '40px' }}>
-      <div>
-        <Typography.Title level={2}>課程管理</Typography.Title>
-        <Button type="primary" onClick={linkToCreate}>
-          新增課程
-        </Button>
-        <List
-          grid={{ gutter: 16, column: 3 }}
-          dataSource={data}
-          loading={loading}
-          renderItem={(item) => (
-            <List.Item key={item._id}>
-              <CoachCard data={item} />
-            </List.Item>
-          )}
-        />
+      <div className="flex flex-col">
+        <div className="mb-[30px] flex items-center justify-between">
+          <p className="heading2">課程管理</p>
+          <button className="btn-base" onClick={linkToCreate}>
+            新增課程
+          </button>
+        </div>
+        <ul className="flex flex-wrap gap-[30px]">
+          {data.map((item) => (
+            <li key={item._id} className="h-full">
+              <Link href={`course-list/${item._id}`}>
+                <CoachCard data={item} />
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </main>
   );
