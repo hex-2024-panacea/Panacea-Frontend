@@ -1,3 +1,5 @@
+import { Meta } from '@/types/courses';
+
 export interface FetchOptions {
   url: string;
   method: string;
@@ -9,5 +11,5 @@ export interface ResponseBody<T> {
   code: number;
   data: T;
   message: string;
-  meta: object;
+  meta: Meta;
 }
