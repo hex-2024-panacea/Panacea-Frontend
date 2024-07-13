@@ -11,65 +11,24 @@ dayjs.extend(weekOfYear);
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
 
-interface TimeSlot {
-  startTime: string;
-  endTime: string;
-}
-
-interface ScheduleData {
-  available: TimeSlot[];
-  booked: TimeSlot[];
-}
-
 interface CoachScheduleProps {
   data: CourseSchedule;
   sendCourseScheduleRange: (id: any) => void;
 }
 
-const CoachSchedule = ({ data, sendCourseScheduleRange }: CoachScheduleProps) => {
+const CoachSchedule = ({ sendCourseScheduleRange }: CoachScheduleProps) => {
   const [currentWeek, setCurrentWeek] = useState(dayjs());
-  const [scheduleData, setScheduleData] = useState<ScheduleData>({
-    available: [],
-    booked: [],
-  });
   const handleSendCourseScheduleRange = (id: any) => {
     sendCourseScheduleRange(id);
   };
 
-  useEffect(() => {
-    setScheduleData(data);
-  }, [data, currentWeek]);
+  useEffect(() => {}, [currentWeek]);
 
   const weekStart = currentWeek.startOf('week');
   const weekEnd = currentWeek.endOf('week');
 
   const days = Array.from({ length: 7 }, (_, i) => weekStart.add(i, 'day'));
   const hours = Array.from({ length: 18 }, (_, i) => i + 7); // 7:00 to 23:00
-
-  const getTimeSlotStatus = (day: dayjs.Dayjs, hour: number): 'booked' | 'available' | 'unavailable' => {
-    const slotStart = day.hour(hour).minute(0).second(0);
-    const slotEnd = slotStart.add(1, 'hour');
-    const isBooked = scheduleData.booked.some((slot) => {
-      const bookingStart = dayjs(slot.startTime);
-      const bookingEnd = dayjs(slot.endTime);
-      return (
-        slotStart.isBetween(bookingStart, bookingEnd, null, '[]') ||
-        slotEnd.isBetween(bookingStart, bookingEnd, null, '[]')
-      );
-    });
-
-    if (isBooked) return 'booked';
-    const isAvailable = scheduleData.available.some((slot) => {
-      const availableStart = dayjs(slot.startTime);
-      const availableEnd = dayjs(slot.endTime);
-      return (
-        slotStart.isBetween(availableStart, availableEnd, null, '[]') ||
-        slotEnd.isBetween(availableStart, availableEnd, null, '[]')
-      );
-    });
-
-    return isAvailable ? 'available' : 'unavailable';
-  };
 
   const navigateWeek = (direction: 'prev' | 'next') => {
     const newWeek = direction === 'prev' ? currentWeek.subtract(1, 'week') : currentWeek.add(1, 'week');
@@ -86,22 +45,11 @@ const CoachSchedule = ({ data, sendCourseScheduleRange }: CoachScheduleProps) =>
   };
 
   const handleTimeSlotClick = (day: dayjs.Dayjs, hour: number) => {
-    if (getTimeSlotStatus(day, hour) === 'available') {
-      const clickedSlot = scheduleData.available.find((slot) => {
-        const slotStart = day.hour(hour).minute(0).second(0);
-        const slotEnd = slotStart.add(1, 'hour');
-        const startTime = dayjs(slot.startTime);
-        const endTime = dayjs(slot.endTime);
-        return slotStart.isBetween(startTime, endTime, null, '[]') && slotEnd.isBetween(startTime, endTime, null, '[]');
-      });
+    const date = dayjs(day);
+    const startTime = dayjs(date).add(hour, 'hour');
+    const endTime = dayjs(date).add(hour + 1, 'hour');
 
-      if (clickedSlot) {
-        // 在這裡可以處理進一步的操作，比如顯示提示或者執行預訂操作
-
-        console.log('Clicked on available slot:', clickedSlot);
-      }
-      handleSendCourseScheduleRange(clickedSlot);
-    }
+    handleSendCourseScheduleRange({ startTime, endTime });
   };
 
   return (
@@ -141,18 +89,10 @@ const CoachSchedule = ({ data, sendCourseScheduleRange }: CoachScheduleProps) =>
             <React.Fragment key={hour}>
               <div className="flex w-[70px] items-center justify-center bg-[#F4F5F5] text-[#A3A3A3]">{`${hour}:00`}</div>
               {days.map((day) => {
-                const status = getTimeSlotStatus(day, hour);
                 return (
                   <div
                     key={`${day.format()}-${hour}`}
-                    tabIndex={status === 'available' ? 0 : undefined}
-                    className={`col-span-1 h-8 border border-[#fff] focus:bg-primary-500 ${
-                      status === 'booked'
-                        ? 'bg-[#BCE3FA]'
-                        : status === 'available'
-                          ? 'cursor-pointer bg-[#E5E5E5] hover:bg-[#d2d2d2]'
-                          : 'bg-[#FAFAFA]'
-                    }`}
+                    className={`col-span-1 h-8 cursor-pointer border border-[#fff] bg-[#E5E5E5] hover:bg-[#d2d2d2]`}
                     onClick={() => handleTimeSlotClick(day, hour)}
                   ></div>
                 );

@@ -23,7 +23,7 @@ const handleLogout = async () => {
 };
 
 export default function SideBar() {
-  const { name, isCoach } = userStore();
+  const { name, isCoach, isAdmin, avatar } = userStore();
   type MenuItem = Required<MenuProps>['items'][number];
   const items: MenuItem[] = [
     {
@@ -46,34 +46,50 @@ export default function SideBar() {
     {
       type: 'divider',
     },
-    {
-      key: 'coach',
-      label: '教練中心',
-      icon: <UserOutlined />,
-      children: [
-        { key: '3', label: <Link href={'/profile/coach'}>教練檔案</Link> },
-        { key: '4', label: <Link href={'/profile/coach/course-manage'}>課程管理</Link> },
-        { key: '5', label: <Link href={'/profile/coach/course-list'}>課程清單</Link> },
-      ],
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'admin',
-      label: '系統管理員',
-      icon: <SettingOutlined />,
-      children: [{ key: '6', label: <Link href={'/admin/user'}>進入後台</Link> }],
-    },
-    {
-      type: 'divider',
-    },
+  ];
+
+  if (isCoach) {
+    items.push(
+      {
+        key: 'coach',
+        label: '教練中心',
+        icon: <UserOutlined />,
+        children: [
+          { key: '3', label: <Link href={'/profile/coach'}>教練檔案</Link> },
+          { key: '4', label: <Link href={'/profile/coach/course-manage'}>課程管理</Link> },
+          { key: '5', label: <Link href={'/profile/coach/course-list'}>課程清單</Link> },
+        ],
+      },
+      {
+        type: 'divider',
+      },
+    );
+  }
+
+  if (isAdmin) {
+    items.push(
+      {
+        key: 'admin',
+        label: '系統管理員',
+        icon: <SettingOutlined />,
+        children: [{ key: '6', label: <Link href={'/admin/user'}>進入後台</Link> }],
+      },
+      {
+        type: 'divider',
+      },
+    );
+  }
+
+  items.push(
     {
       key: 'logout',
       label: '登出',
       icon: <LogoutOutlined />,
     },
-  ];
+    {
+      type: 'divider',
+    },
+  );
   const onClick: MenuProps['onClick'] = (e) => {
     if (e.key === 'logout') {
       handleLogout();
@@ -83,16 +99,16 @@ export default function SideBar() {
     <aside className="mb-10 h-full w-64">
       <div className="rounded-l bg-primary-200">
         <div className="mb-4 flex flex-col p-4">
-          <h5 className="flex gap-1 align-baseline">
-            <Image src="/account.svg" alt="icon" width={22} height={22} />
-            <span className="text-xl">{name}</span>
+          <h5 className="align-center mb-[10px] flex gap-1">
+            <Image src={avatar ? avatar : '/account.svg'} alt="icon" width={30} height={30} className="rounded-full" />
+            <span className="body">{name}</span>
           </h5>
           {isCoach && (
             <div className="flex flex-col pl-7">
               <span className="flex justify-between">
                 <span>教練審核狀態</span>
                 <div className="flex gap-1 align-baseline">
-                  <Image src={'./checked.svg'} alt={'icon'} width={22} height={22} />
+                  <Image src={'/checked.svg'} alt={'icon'} width={22} height={22} />
                   <span>已審核</span>
                 </div>
               </span>
