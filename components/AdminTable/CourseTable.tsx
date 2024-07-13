@@ -1,8 +1,8 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Table, Button, Input, Modal, Divider, type TableProps } from 'antd';
+import { Table, Space, Tag, Button, Input, Modal, type TableProps } from 'antd';
 import type { UserListType } from '@/types/admin';
-import { getUserList, editUser } from '@/app/api/admin/user';
+import { getCourseList, reviewCourse } from '@/app/api/admin/course';
 
 interface DataType {
   key: string;
@@ -17,8 +17,9 @@ export default function CourseTable(props: { resultData: UserListType }) {
   const { resultData } = props;
   const [tableData, setTableData] = useState<DataType[] | any>(resultData);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalData, setModalData] = useState<DataType | any>(null);
-  const [editData, setEditData] = useState<DataType | any>(null);
+  const [reviewStatus, setReviewStatus] = useState<string>('');
+  const [reviewReason, setReviewReason] = useState<string>('');
+  const [reviewId, setReviewId] = useState<string>('');
 
   const columns: TableProps<DataType | any>['columns'] = useMemo(
     () => [
@@ -28,106 +29,106 @@ export default function CourseTable(props: { resultData: UserListType }) {
         key: 'id',
       },
       {
-        title: '姓名',
+        title: '課程名稱',
         dataIndex: 'name',
         key: 'name',
       },
       {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
+        title: '教練',
+        dataIndex: 'coach',
+        key: 'coachName',
+        render: (text) => text.name,
       },
       {
-        title: '生日',
-        dataIndex: 'birthday',
-        key: 'birthday',
+        title: '課程價格(數量:價格)',
+        dataIndex: 'coursePrice',
+        key: 'coursePrice',
+        render: (data) => {
+          type dataType = {
+            _id: string;
+            count: number;
+            price: number;
+          };
+          return data.map((item: dataType) => {
+            return (
+              <Tag className="mr-2" key={item._id}>
+                {item.count}：{item.price}
+              </Tag>
+            );
+          });
+        },
       },
       {
-        title: '註冊時間',
-        dataIndex: 'emailVerifiedAt',
-        key: 'emailVerifiedAt',
+        title: '課程狀態',
+        dataIndex: 'approvalStatus',
+        key: 'approvalStatus',
       },
       {
         title: '操作',
         key: 'action',
         render: (_: any, record: any) => (
-          <span>
-            <Button type="primary" onClick={() => handleEdit(record)}>
-              編輯
+          <Space size={[8, 16]}>
+            <Button type="primary" onClick={() => handleReview(record._id, 'success')}>
+              審核成功
             </Button>
-            <Button type="primary" onClick={() => handleReview(record._id)}>
-              審核
+            <Button type="primary" onClick={() => handleReview(record._id, 'fail')}>
+              審核失敗
             </Button>
-          </span>
+          </Space>
         ),
       },
     ],
     [],
   );
-  const handleEdit = (record: DataType) => {
-    setModalData(record);
-    setIsModalOpen(true);
-  };
-  const handleOk = async () => {
-    await editUser(modalData._id, editData)
+  const handleOk = () => {
+    setIsModalOpen(false);
+    reviewCourse(reviewId, {
+      approvalStatus: reviewStatus,
+      reason: reviewReason,
+    })
       .then(() => {
-        getUserList().then((res) => {
+        getCourseList().then((res: any) => {
           setTableData(res.data);
         });
       })
       .finally(() => {
         setIsModalOpen(false);
-        setModalData(null);
+        setReviewId('');
+        setReviewStatus('');
+        setReviewReason('');
       });
   };
-  const handleReview = (id: string) => {
-    console.log(id);
+  const handleReview = async (id: string, approvalStatus: string) => {
+    setIsModalOpen(true);
+    setReviewId(id);
+    setReviewStatus(approvalStatus);
   };
   return (
     <>
-      <Table columns={columns} dataSource={tableData} rowKey={(record) => record._id} />
+      <Table
+        pagination={{ position: ['none', 'bottomCenter'] }}
+        columns={columns}
+        dataSource={tableData}
+        rowKey={(record) => record._id}
+      />
       <Modal
-        title="Basic Modal"
+        title={reviewStatus === 'success' ? '確認審核成功' : '確認審核失敗'}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={() => {
           setIsModalOpen(false);
-          setEditData(null);
+          setReviewId('');
+          setReviewStatus('');
+          setReviewReason('');
         }}
       >
-        <p>ID{modalData?._id}</p>
-        <Divider />
-        <p>
-          姓名：
-          <Input
-            defaultValue={modalData?.name}
-            type="string"
-            onChange={(text) => {
-              setEditData({ ...editData, name: text.target.value });
-            }}
-          />
-        </p>
-        <Divider />
-        <div>
-          Email：
-          <Input
-            defaultValue={modalData?.email}
-            type="string"
-            onChange={(text) => {
-              setEditData({ ...editData, email: text.target.value });
-            }}
-          />
-        </div>
-        <Divider />
-        <div>
-          生日：
-          <Input
-            type="date"
-            onChange={(text) => {
-              setEditData({ ...editData, birthday: text.target.value });
-            }}
-          />
-        </div>
+        {reviewStatus === 'fail' && (
+          <>
+            <p>失敗原因</p>
+            <Input type="text" onChange={(text) => setReviewReason(text.target.value)} />
+          </>
+        )}
+        {reviewStatus === 'success' && <p>確定審核成功?</p>}
       </Modal>
     </>
   );
