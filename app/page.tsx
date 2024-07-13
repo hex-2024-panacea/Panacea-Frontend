@@ -1,10 +1,16 @@
 import Image from 'next/image';
 import Search from '@/components/HomePage/Search';
+import search from '@/public/search.jpg';
+import reserve from '@/public/reserve.jpg';
+import anywhere from '@/public/anywhere.jpg';
+import coach1 from '@/public/coach-1.png';
+import coach2 from '@/public/coach-2.png';
+import coach3 from '@/public/coach-3.png';
 
 interface LandingOption {
   title: string;
   description: string;
-  img?: string;
+  img?: any;
   url?: string;
   sidebar?: string;
   slogan?: string;
@@ -15,20 +21,20 @@ const searchCourse: LandingOption[] = [
     title: '利用不同篩選條件搜尋',
     description: '可以利用課程類別、上課時間，選擇你想要的課程，也可以在課程頁面看到教練資訊以及其他學員的評價。',
     sidebar: 'search',
-    img: '/search.jpg',
+    img: search,
   },
   {
     title: '彈性預約課程',
     description:
       '購買課程後，可以在教練行事曆上選擇有空的時間預約。預約成功後，會收到成功通知，並將課程加入學員的行事曆中。',
     sidebar: 'reserve',
-    img: '/reserve.jpg',
+    img: reserve,
   },
   {
     title: '任意地點上課',
     description: '課程時間到時，只要利用 Zoom 就可利用手機、電腦或是平板開啟課程，就可以開始上課。',
     sidebar: 'anywhere',
-    img: '/anywhere.jpg',
+    img: anywhere,
   },
 ];
 
@@ -36,17 +42,17 @@ const coachSteps: LandingOption[] = [
   {
     title: '註冊成為教練',
     description: '點選成為教練，填入表單資料並上傳相關證件後，經過審核即可成為教練。',
-    img: '/coach-1.png',
+    img: coach1,
   },
   {
     title: '上架課程',
     description: '為你的課程寫上專屬的介紹，並選擇課堂數量及可選擇的上課時間。',
-    img: '/coach-2.png',
+    img: coach2,
   },
   {
     title: '媒合學員',
     description: '當有學員預約課程成功後，會有成功通知並在行事曆上添加行程，時間到後就可以使用 Zoom 開始上課。',
-    img: '/coach-3.png',
+    img: coach3,
   },
 ];
 
@@ -78,7 +84,7 @@ export default function Home() {
           <span className="text-primary-500">課程</span>
           <Image className="ml-[5px] translate-y-[-15px]" src="/decorate.svg" alt="icon" width={24} height={48} />
         </h3>
-        <Image src="/hit.jpg" alt="icon" width={1296} height={640} />
+        <Image src="/hit.jpg" alt="icon" className="rounded-[12px]" width={1296} height={640} />
       </section>
       <section className="mb-[80px]">
         <h3 className="heading1 mb-[72px] flex justify-center font-bold">
@@ -105,7 +111,7 @@ export default function Home() {
                   <p className="heading5">{description}</p>
                 </div>
               </div>
-              <Image src={img} alt="icon" width={416} height={215} />
+              <Image src={img.src} alt="icon" className="rounded-[12px]" width={416} height={215} />
               <p
                 className="heading3 ml-[24px] translate-y-[-80px] underline underline-offset-[8px]"
                 style={{ writingMode: 'vertical-lr' }}
@@ -129,7 +135,7 @@ export default function Home() {
               className="relative flex items-center border-dashed border-[#BCE3FA] px-[94px] py-[48px] [&:nth-child(1)]:border-b [&:nth-child(2)]:border-b"
               key={index}
             >
-              <Image src={img} alt="icon" width={525} height={320} />
+              <Image src={img.src} alt="icon" className="rounded-[12px]" width={525} height={320} />
               <div className="flex w-[526px] flex-col gap-[32px] px-[48px]">
                 <div className="heading3 w-[175px] rounded-[40px] bg-second-400 px-[36px] py-[8px] text-center">
                   Step{index + 1}
