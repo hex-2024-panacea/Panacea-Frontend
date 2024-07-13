@@ -138,7 +138,7 @@ export default function Signup() {
 
           <Form.Item>
             <Button block type="primary" htmlType="submit" loading={loading}>
-              登入
+              註冊
             </Button>
           </Form.Item>
         </Form>
